@@ -18,7 +18,7 @@ public class DBConnection {
     public DBConnection(){
         try {
             InputStream prob = null;
-            prob = DBConnection.class.getResourceAsStream("/resources/db.properties");
+            prob = DBConnection.class.getResourceAsStream("/db.properties");
             Properties pros = new Properties();
             pros.load(prob);
             url = pros.getProperty("url");
