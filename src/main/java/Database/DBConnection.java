@@ -9,7 +9,6 @@ import java.util.Properties;
 public class DBConnection {
     // JDBC driver name and database URL
     static final String JDBC_DRIVER = "com.mysql.jdbc.Driver";
-    static final String DB_URL = "jdbc:mysql://localhost:3307/users";
     String url;
     String user;
     String passowrd;
@@ -18,7 +17,7 @@ public class DBConnection {
     public DBConnection(){
         try {
             InputStream prob = null;
-            prob = DBConnection.class.getResourceAsStream("/resources/db.properties");
+            prob = DBConnection.class.getResourceAsStream("/db.properties");
             Properties pros = new Properties();
             pros.load(prob);
             url = pros.getProperty("url");

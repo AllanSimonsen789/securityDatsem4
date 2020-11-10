@@ -1,7 +1,7 @@
 package Controllers;
 
 import Database.DBConnection;
-import ExtraClasses.User;
+import model.User;
 
 import javax.servlet.ServletException;
 import javax.servlet.annotation.WebServlet;
