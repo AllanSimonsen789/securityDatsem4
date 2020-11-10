@@ -1,5 +1,6 @@
 package Controllers;
 
+import Database.DBConnection;
 import ExtraClasses.User;
 
 import javax.servlet.ServletException;
@@ -19,9 +20,12 @@ public class Login extends HttpServlet {
 
         //Lav switch - login, logout, register på cmd.
         User userObject = new User();
+        DBConnection dbc = new DBConnection();
 
         request.setAttribute("username", request.getParameter("loginname"));
         request.setAttribute("password", request.getParameter("password"));
+        request.setAttribute("confirm", dbc.getPassowrd() + dbc.getUser() + dbc.getUrl());
+
 
         if(userObject.isValidUserCredentials(request.getParameter("loginname"), request.getParameter("password"))){
             request.getRequestDispatcher("/welcome.jsp").forward(request, response);

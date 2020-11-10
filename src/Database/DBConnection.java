@@ -10,15 +10,15 @@ public class DBConnection {
     // JDBC driver name and database URL
     static final String JDBC_DRIVER = "com.mysql.jdbc.Driver";
     static final String DB_URL = "jdbc:mysql://localhost:3307/users";
-    static String url;
-    static String user;
-    static String passowrd;
+    String url;
+    String user;
+    String passowrd;
 
     //  Database credentials
-    public DBConnection(Boolean testMode){
+    public DBConnection(){
         try {
             InputStream prob = null;
-            prob = DBConnection.class.getResourceAsStream("/db.properties");
+            prob = DBConnection.class.getResourceAsStream("/resources/db.properties");
             Properties pros = new Properties();
             pros.load(prob);
             url = pros.getProperty("url");
@@ -27,5 +27,17 @@ public class DBConnection {
         } catch (IOException ex) {
             System.out.println(ex);
         }
+    }
+
+    public String getUrl() {
+        return url;
+    }
+
+    public String getUser() {
+        return user;
+    }
+
+    public String getPassowrd() {
+        return passowrd;
     }
 }
