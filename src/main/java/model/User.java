@@ -22,12 +22,12 @@ public class User {
     }
 
     //Register constructor
-    public User(String userName, String password, String email, String role, Date creationDate) {
+    public User(String userName, String password, String email) {
         this.userName = userName;
-        this.password = BCrypt.hashpw(password, BCrypt.gensalt(10));
+        this.password = BCrypt.hashpw(password, BCrypt.gensalt(12));
         this.email = email;
-        this.role = role;
-        this.creationDate = creationDate;
+        this.role = "user";
+        this.creationDate = new Date();
     }
 
     public long getUserID() { return userID; }
@@ -52,21 +52,17 @@ public class User {
         this.userName = userName;
     }
 
+    //Might not be needed.
     public void setPassword(String password) {
-        this.password = BCrypt.hashpw(password, BCrypt.gensalt(10));
+        this.password = BCrypt.hashpw(password, BCrypt.gensalt(12));
     }
 
-    public boolean verifyPassword(String pw) {
-        return (BCrypt.checkpw(pw, password));
+    public void setUserID(long userID) { this.userID = userID; }
+
+    public void setEmail(String email) { this.email = email; }
+
+    public boolean verifyPassword(String typedPw, String sqlPW) {
+        return (BCrypt.checkpw(typedPw, sqlPW));
     }
 
-
-    //Dummy remove later.
-    public boolean isValidUserCredentials(String sUserName, String sUserPassword) {
-        if (sUserName.equals("test") && sUserPassword.equals("test123")) {
-            return true;
-        } else {
-            return false;
-        }
-    }
 }

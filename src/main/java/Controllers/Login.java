@@ -22,22 +22,22 @@ public class Login extends HttpServlet {
 
         //Lav switch - login, logout, register på cmd.
         User userObject = new User();
-        DBConnection dbc = new DBConnection();
+        //DBConnection dbc = new DBConnection();
 
         request.setAttribute("username", request.getParameter("loginname"));
         request.setAttribute("password", request.getParameter("password"));
-        request.setAttribute("confirm", dbc.getPassowrd() + dbc.getUser() + dbc.getUrl());
+        //request.setAttribute("confirm", dbc.getPassowrd() + dbc.getUser() + dbc.getUrl());
         String gRecaptchaResponse = request
                 .getParameter("g-recaptcha-response");
-        System.out.println(gRecaptchaResponse);
+        //System.out.println(gRecaptchaResponse);
         boolean verify = VerifyRecaptcha.verify(gRecaptchaResponse);
 
-        if(userObject.isValidUserCredentials(request.getParameter("loginname"), request.getParameter("password")) && verify){
-            request.getRequestDispatcher("/welcome.jsp").forward(request, response);
-        } else {
-            request.setAttribute("errorMessage", "Invalid login and password. Try again");
-            request.getRequestDispatcher("/login.jsp").forward(request, response);
-        }
+//        if(userObject.isValidUserCredentials(request.getParameter("loginname"), request.getParameter("password")) && verify){
+//            request.getRequestDispatcher("/welcome.jsp").forward(request, response);
+//        } else {
+//            request.setAttribute("errorMessage", "Invalid login and password. Try again");
+//            request.getRequestDispatcher("/login.jsp").forward(request, response);
+//        }
     }
 
     //Edit when needed
