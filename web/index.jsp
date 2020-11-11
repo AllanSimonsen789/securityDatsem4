@@ -13,5 +13,8 @@
   <body>
   <h1>HelloWorld!</h1>
   <p>Hello world - setup!</p>
+  <form action="/login">
+    <input type="submit" value="login" />
+  </form>
   </body>
 </html>
