@@ -4,39 +4,52 @@ import org.w3c.dom.ls.LSOutput;
 
 import java.io.IOException;
 import java.io.InputStream;
+import java.sql.Connection;
+import java.sql.DriverManager;
+import java.sql.SQLException;
 import java.util.Properties;
 
 public class DBConnection {
     // JDBC driver name and database URL
-    static final String JDBC_DRIVER = "com.mysql.jdbc.Driver";
-    String url;
-    String user;
-    String passowrd;
+    private static String url;
+    private static String user;
+    private static String passowrd;
+    private static String driver;
+    private static DBConnection instance;
 
     //  Database credentials
-    public DBConnection(){
+    public Connection getConnection(){
+        Connection conn = null;
         try {
             InputStream prob = null;
             prob = DBConnection.class.getResourceAsStream("/db.properties");
             Properties pros = new Properties();
             pros.load(prob);
+            //assign parameters
             url = pros.getProperty("url");
             user = pros.getProperty("user");
             passowrd = pros.getProperty("password");
-        } catch (IOException ex) {
+            driver = pros.getProperty("driver");
+
+            //Create connection
+            if (conn == null){
+                //Class.forName(driver);//This should not be nescecary.
+                conn = DriverManager.getConnection(url, user, passowrd);
+            }
+        } catch (IOException | SQLException ex) {
             System.out.println(ex);
         }
+        return conn;
     }
 
-    public String getUrl() {
-        return url;
+    public static DBConnection getInstance(){
+        if(instance == null){
+            instance = new DBConnection();
+        }
+        return instance;
     }
 
-    public String getUser() {
-        return user;
-    }
-
-    public String getPassowrd() {
-        return passowrd;
+    public DBConnection() {
+        //Empty initialization
     }
 }
