@@ -13,7 +13,8 @@
 <body>
     <h1>Welcome!</h1>
     <p>Dear: ${username}</p>
-    <p>Your password is: ${password}</p>
+    <p>Your Email is ${email}</p>
+    <p>Your id is ${id}</p>
     <%--<p>Confirm: ${confirm}</p>--%>
 </body>
 </html>

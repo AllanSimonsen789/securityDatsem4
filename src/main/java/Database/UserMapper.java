@@ -1,8 +1,9 @@
 package Database;
 
-import model.User;
 import Exception.AuthenticationException;
 import Exception.MySQLDuplicateEntryException;
+import model.User;
+
 
 import java.sql.*;
 
@@ -60,7 +61,7 @@ public class UserMapper {
                 rs.close();
                 pStmt.close();
                 conn.close();
-            } catch (SQLException e) {
+            } catch (SQLException | NullPointerException e) {
                 e.printStackTrace();
             }
         }
@@ -68,7 +69,7 @@ public class UserMapper {
     }
 
     //Register user
-    public static User Register(String userName, String password, String email) throws MySQLDuplicateEntryException {
+    public User Register(String userName, String password, String email) throws MySQLDuplicateEntryException {
         User user = new User(userName, password, email);
         PreparedStatement pStmt = null;
         Connection conn = null;

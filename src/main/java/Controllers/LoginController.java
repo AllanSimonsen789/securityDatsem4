@@ -1,7 +1,6 @@
 package Controllers;
 
-import Database.DBConnection;
-import model.User;
+import Database.UserMapper;
 
 import javax.servlet.ServletException;
 import javax.servlet.annotation.WebServlet;
@@ -12,6 +11,8 @@ import javax.servlet.http.HttpSession;
 import java.io.IOException;
 import java.sql.Connection;
 import java.sql.SQLException;
+import Exception.AuthenticationException;
+import model.User;
 
 
 @WebServlet(name = "LoginController")
@@ -21,20 +22,24 @@ public class LoginController extends HttpServlet {
         String cmd = request.getParameter("cmd");
 
         //Lav switch - login, logout, register på cmd.
-        User userObject = new User();
-        DBConnection dbc = new DBConnection();
+        UserMapper us = new UserMapper();
 
-        request.setAttribute("username", request.getParameter("loginname"));
-        request.setAttribute("password", request.getParameter("password"));
-        request.setAttribute("confirm", dbc.getPassowrd() + dbc.getUser() + dbc.getUrl());
-        String gRecaptchaResponse = request
-                .getParameter("g-recaptcha-response");
-        System.out.println(gRecaptchaResponse);
-        boolean verify = VerifyRecaptcha.verify(gRecaptchaResponse);
+        try{
+            User user = us.Login(request.getParameter("loginname"), request.getParameter("password"));
+            String gRecaptchaResponse = request
+                    .getParameter("g-recaptcha-response");
+            boolean verify = VerifyRecaptcha.verify(gRecaptchaResponse);
 
-        if(userObject.isValidUserCredentials(request.getParameter("loginname"), request.getParameter("password")) && verify){
-            request.getRequestDispatcher("/WEB-INF/welcome.jsp").forward(request, response);
-        } else {
+            if(user != null && verify) {
+                request.setAttribute("username", user.getUserName());
+                request.setAttribute("id", user.getUserID());
+                request.setAttribute("email", user.getEmail());
+                request.getRequestDispatcher("/WEB-INF/welcome.jsp").forward(request, response);
+            }else{
+                throw new AuthenticationException("SoMeThInG WeNt WrOnG :(");
+            }
+
+        }catch (AuthenticationException e){
             request.setAttribute("errorMessage", "Invalid login and password. Try again");
             request.getRequestDispatcher("/WEB-INF/login.jsp").forward(request, response);
         }

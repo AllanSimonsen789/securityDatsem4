@@ -33,10 +33,10 @@ public class DBConnection {
 
             //Create connection
             if (conn == null){
-                //Class.forName(driver);//This should not be nescecary.
+                Class.forName(driver);
                 conn = DriverManager.getConnection(url, user, passowrd);
             }
-        } catch (IOException | SQLException ex) {
+        } catch (IOException | SQLException | ClassNotFoundException ex) {
             System.out.println(ex);
         }
         return conn;
