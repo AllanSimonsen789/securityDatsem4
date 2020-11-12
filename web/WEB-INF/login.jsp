@@ -5,7 +5,8 @@
   Time: 14:55
   To change this template use File | Settings | File Templates.
 --%>
-<%@ taglib uri="http://java.sun.com/jsp/jstl/core" prefix="c" %>
+<%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
+<%@ taglib prefix="fn" uri="http://java.sun.com/jsp/jstl/functions" %>
 <%@ page contentType="text/html;charset=UTF-8" language="java" %>
 <html>
 <head>
@@ -21,7 +22,7 @@
              data-sitekey="6LceeOEZAAAAAD_L11JeMvfL--daZlljXe64RVYY"></div>
         <input type="submit" value="Login"/>
     </form>
-    <p>${csrf_success_error}</p>
-    <p style="color:red">${errorMessage}</p>
+    <p><c:out value="${csrf_success_error}" /></p>
+    <p style="color:red"><c:out value="${errorMessage}" /></p>
 </body>
 </html>

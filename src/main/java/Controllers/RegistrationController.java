@@ -54,10 +54,10 @@ public class RegistrationController extends HttpServlet {
             }
         } catch (MySQLDuplicateEntryException e) {
             request.setAttribute("errorMessage", "This username allready exists");
-            request.getRequestDispatcher("/register.jsp").forward(request, response);
+            request.getRequestDispatcher("/WEB-INF/register.jsp").forward(request, response);
         } catch (RegistrationException e) {
             request.setAttribute("errorMessage", e.getMessage());
-            request.getRequestDispatcher("/register.jsp").forward(request, response);
+            request.getRequestDispatcher("/WEB-INF/register.jsp").forward(request, response);
         }
     }
 
@@ -65,7 +65,7 @@ public class RegistrationController extends HttpServlet {
 //        request.getRequestDispatcher("/register.jsp").forward(request, response); //Den her rammer /register og ikke /register.jsp
 
         if (request.getRequestURI().equals("/register")) {
-            response.sendRedirect("/register.jsp");
+            request.getRequestDispatcher("/WEB-INF/register.jsp").forward(request, response);
         }
     }
 }
