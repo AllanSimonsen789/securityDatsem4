@@ -24,8 +24,6 @@ public class LoginController extends HttpServlet {
             request.setAttribute("csrf_success_error", "Tokens are NOT equal");
             request.setAttribute("web_csrf_token", SecureRandomString.genSecureRandomString());
         }
-//        HttpSession session = request.getSession();
-//        String cmd = request.getParameter("cmd");
 
         //Lav switch - login, logout, register på cmd.
         UserMapper us = new UserMapper();
