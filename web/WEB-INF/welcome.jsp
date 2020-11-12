@@ -18,5 +18,9 @@
     <p>Your Email is <c:out value="${email}" /></p>
     <p>Your id is <c:out value="${id}" /></p>
 
-</body>
+    <% if(request.getAttribute("created") != null){ %>
+    <p><c:out value="${created}" /></p>
+    <%}%>
+
+    </body>
 </html>
