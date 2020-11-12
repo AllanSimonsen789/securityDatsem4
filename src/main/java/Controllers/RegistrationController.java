@@ -4,6 +4,7 @@ import Database.UserMapper;
 import Exception.MySQLDuplicateEntryException;
 import Exception.RegistrationException;
 import ExtraClasses.RegistrationHelper;
+import ExtraClasses.VerifyRecaptcha;
 import model.User;
 
 import javax.servlet.ServletException;

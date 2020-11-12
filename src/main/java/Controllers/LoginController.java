@@ -11,6 +11,7 @@ import javax.servlet.http.HttpSession;
 import java.io.IOException;
 import Exception.AuthenticationException;
 import ExtraClasses.SecureRandomString;
+import ExtraClasses.VerifyRecaptcha;
 import model.User;
 
 

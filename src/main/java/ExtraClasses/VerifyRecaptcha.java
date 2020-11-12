@@ -1,4 +1,4 @@
-package Controllers;
+package ExtraClasses;
 
 import java.io.BufferedReader;
 import java.io.DataOutputStream;
