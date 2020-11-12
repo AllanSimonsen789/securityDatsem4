@@ -7,6 +7,13 @@ import model.User;
 
 import java.sql.*;
 
+/**
+ * Created by IntelliJ IDEA.
+ *   User: rando
+ *   Date: 24/09/2020
+ *   Time: 18:32
+ *   To change this template use File | Settings | File Templates.
+ */
 public class UserMapper {
 
     //Login user
@@ -25,7 +32,8 @@ public class UserMapper {
             String sql;
             sql = "SELECT id, userName, password, email " +
                     "FROM userstable " +
-                    "WHERE userName LIKE?";
+                    "WHERE userName LIKE? " +
+                    "LIMIT 1";
             pStmt = conn.prepareStatement(sql);
             pStmt.setString(1, username);
             rs = pStmt.executeQuery();
@@ -71,6 +79,7 @@ public class UserMapper {
     //Register user
     public User Register(String userName, String password, String email) throws MySQLDuplicateEntryException {
         User user = new User(userName, password, email);
+        User returnUser = new User();
         PreparedStatement pStmt = null;
         Connection conn = null;
         ResultSet rs = null;
@@ -95,14 +104,16 @@ public class UserMapper {
             //Ensure that the user was created and what ID they got from auto_increment in DB.
             rs = pStmt.getGeneratedKeys();
             if(rs != null && rs.next()){
-                user.setUserID(rs.getInt(1));
+                returnUser.setUserID(rs.getInt(1));
+                returnUser.setEmail(user.getEmail());
+                returnUser.setUserName(user.getUserName());
             }
         } catch (SQLException ex) {
             throw new MySQLDuplicateEntryException("SQL server error, Duplicate entry");
         }finally {
             //finally block used to close resources
             try {
-                rs.close();
+                if(rs != null){rs.close();}
                 pStmt.close();
                 conn.close();
             } catch (SQLException e) {
@@ -110,7 +121,7 @@ public class UserMapper {
                 System.out.println("Finally failed to close connections");
             }
         }
-        return user;
+        return returnUser;
     }
 
     //update user

@@ -16,5 +16,8 @@
   <form action="/login">
     <input type="submit" value="login" />
   </form>
+  <form action="/register">
+    <input type="submit" value="register" />
+  </form>
   </body>
 </html>

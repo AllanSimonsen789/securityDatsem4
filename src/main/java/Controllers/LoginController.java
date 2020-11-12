@@ -9,17 +9,23 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
 import java.io.IOException;
-import java.sql.Connection;
-import java.sql.SQLException;
 import Exception.AuthenticationException;
+import ExtraClasses.SecureRandomString;
 import model.User;
 
 
 @WebServlet(name = "LoginController")
 public class LoginController extends HttpServlet {
     protected void doPost(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
-        HttpSession session = request.getSession();
-        String cmd = request.getParameter("cmd");
+        if(SecureRandomString.validateSecureString(request.getParameter("web_token"))) {
+            request.setAttribute("csrf_success_error", "Tokens are equal");
+            request.setAttribute("web_csrf_token", SecureRandomString.genSecureRandomString());
+        } else {
+            request.setAttribute("csrf_success_error", "Tokens are NOT equal");
+            request.setAttribute("web_csrf_token", SecureRandomString.genSecureRandomString());
+        }
+//        HttpSession session = request.getSession();
+//        String cmd = request.getParameter("cmd");
 
         //Lav switch - login, logout, register på cmd.
         UserMapper us = new UserMapper();
@@ -31,6 +37,18 @@ public class LoginController extends HttpServlet {
             boolean verify = VerifyRecaptcha.verify(gRecaptchaResponse);
 
             if(user != null && verify) {
+                //Login sucsessfull. Username and hashed psw are correct.
+
+                // get current session
+                HttpSession session = request.getSession();
+                //The code below makes sure that we are given a new session id whenever we refresh - after our initial login.
+                //This needs to happen. Because it will ensure that no-one can steal a session id, and then pretend to be the logged in person.
+                // remove current session
+                session.invalidate();
+                session = request.getSession(true);
+                // generate a new session
+                session.setAttribute("username", user);
+
                 request.setAttribute("username", user.getUserName());
                 request.setAttribute("id", user.getUserID());
                 request.setAttribute("email", user.getEmail());
@@ -104,7 +122,7 @@ public class LoginController extends HttpServlet {
     }
 
     protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
-        //request.setAttribute("web_csrf_token", SecureRandomString.genSecureRandomString());
+        request.setAttribute("web_csrf_token", SecureRandomString.genSecureRandomString());
         request.getRequestDispatcher("/WEB-INF/login.jsp").forward(request, response);
 
         if(request.getRequestURL().equals("/login")) {
@@ -114,8 +132,6 @@ public class LoginController extends HttpServlet {
             session.invalidate();
             response.sendRedirect("index.jsp");
         }
-
-
     }
 }
 
