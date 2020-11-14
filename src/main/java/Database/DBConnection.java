@@ -15,41 +15,42 @@ public class DBConnection {
     private static String user;
     private static String passowrd;
     private static String driver;
+
     private static DBConnection instance;
 
-    //  Database credentials
-    public Connection getConnection(){
-        Connection conn = null;
-        try {
-            InputStream prob = null;
-            prob = DBConnection.class.getResourceAsStream("/db.properties");
-            Properties pros = new Properties();
-            pros.load(prob);
-            //assign parameters
-            url = pros.getProperty("url");
-            user = pros.getProperty("user");
-            passowrd = pros.getProperty("password");
-            driver = pros.getProperty("driver");
-
-            //Create connection
-            if (conn == null){
-                Class.forName(driver);
-                conn = DriverManager.getConnection(url, user, passowrd);
-            }
-        } catch (IOException | SQLException | ClassNotFoundException ex) {
-            System.out.println(ex);
-        }
-        return conn;
-    }
-
-    public static DBConnection getInstance(){
+    public static DBConnection getInstance() throws IOException {
         if(instance == null){
             instance = new DBConnection();
         }
         return instance;
     }
 
-    public DBConnection() {
-        //Empty initialization
+    public DBConnection() throws IOException {
+        InputStream prob = null;
+        prob = DBConnection.class.getResourceAsStream("/db.properties");
+        Properties pros = new Properties();
+        pros.load(prob);
+        //assign parameters
+        url = pros.getProperty("url");
+        user = pros.getProperty("user");
+        passowrd = pros.getProperty("password");
+        driver = pros.getProperty("driver");
     }
+
+    //  Database credentials
+    public Connection getConnection(){
+        Connection conn = null;
+        try {
+            //Create connection
+            if (conn == null){
+                Class.forName(driver);
+                conn = DriverManager.getConnection(url, user, passowrd);
+            }
+        } catch ( SQLException | ClassNotFoundException ex) {
+            System.out.println(ex);
+        }
+        return conn;
+    }
+
+
 }

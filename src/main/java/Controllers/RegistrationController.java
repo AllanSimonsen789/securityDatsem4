@@ -39,7 +39,7 @@ public class RegistrationController extends HttpServlet {
                     && RegistrationHelper.checkPassword(password)
                     && RegistrationHelper.checkEmail(email)) {
                 //Create user in DB
-                UserMapper um = new UserMapper();
+                UserMapper um = UserMapper.getInstance();
                 User registeredUser = um.Register(userName, password, email);
 
                 //auto login for the user, give session id.

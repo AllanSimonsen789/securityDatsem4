@@ -12,10 +12,6 @@
         <servlet-class>Controllers.LoginController</servlet-class>
     </servlet>
 
-    <servlet>
-        <servlet-name>RegistrationController</servlet-name>
-        <servlet-class>Controllers.RegistrationController</servlet-class>
-    </servlet>
 
     <servlet-mapping>
         <servlet-name>LoginController</servlet-name>
@@ -24,11 +20,26 @@
     </servlet-mapping>
 
 
+
+    <servlet>
+        <servlet-name>RegistrationController</servlet-name>
+        <servlet-class>Controllers.RegistrationController</servlet-class>
+    </servlet>
+
     <servlet-mapping>
         <servlet-name>RegistrationController</servlet-name>
         <url-pattern>/register</url-pattern>
     </servlet-mapping>
 
+    <servlet-mapping>
+        <servlet-name>ForumController</servlet-name>
+        <url-pattern>/forum</url-pattern>
+    </servlet-mapping>
+
+    <servlet>
+        <servlet-name>ForumController</servlet-name>
+        <servlet-class>Controllers.ForumController</servlet-class>
+    </servlet>
 
 <!--   ERROR HANDLING -->
     <error-page>

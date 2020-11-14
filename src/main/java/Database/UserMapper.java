@@ -5,6 +5,7 @@ import Exception.MySQLDuplicateEntryException;
 import model.User;
 
 
+import java.io.IOException;
 import java.sql.*;
 
 /**
@@ -16,6 +17,20 @@ import java.sql.*;
  */
 public class UserMapper {
 
+    private DBConnection DBC;
+    private static UserMapper instance;
+
+    public static UserMapper getInstance() throws IOException {
+        if(instance == null){
+            instance = new UserMapper();
+        }
+        return instance;
+    }
+
+    private UserMapper() throws IOException {
+        DBC = DBConnection.getInstance();
+    }
+
     //Login user
     public User Login(String username, String password) throws AuthenticationException{
         User returnUser = new User();
@@ -25,8 +40,7 @@ public class UserMapper {
         ResultSet rs = null;
         try {
             //Create connection
-            DBConnection dbConn = DBConnection.getInstance();
-            conn = dbConn.getConnection();
+            conn = DBC.getConnection();
 
             //Prepared statement
             String sql;
@@ -85,8 +99,7 @@ public class UserMapper {
         ResultSet rs = null;
         try {
             //Create connection
-            DBConnection dbConn = DBConnection.getInstance();
-            conn = dbConn.getConnection();
+            conn = DBC.getConnection();
 
             //Prepared statement
             String sql;
