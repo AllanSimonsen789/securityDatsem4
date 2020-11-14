@@ -1,8 +1,8 @@
 <%--
   Created by IntelliJ IDEA.
   User: rando
-  Date: 24/09/2020
-  Time: 14:56
+  Date: 14/11/2020
+  Time: 20:12
   To change this template use File | Settings | File Templates.
 --%>
 <%
@@ -13,7 +13,7 @@
         // success action...
     } else {
         // log noget her...
-        response.sendRedirect("/WEB-INF/login.jsp");
+        response.sendRedirect("/index.jsp");
     }
 %>
 <%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
@@ -21,19 +21,13 @@
 <%@ page contentType="text/html;charset=UTF-8" language="java" %>
 <html>
 <head>
-    <meta charset="utf-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
-    <title>Welcome</title>
+    <title>Successful edit</title>
 </head>
 <body>
-    <h1>Welcome!</h1>
-    <p>Dear: <c:out value="${username}" /></p>
-    <p>Your Email is <c:out value="${email}" /></p>
-    <p>Your id is <c:out value="${id}" /></p>
-
-    <% if(request.getAttribute("created") != null){ %>
-    <p><c:out value="${created}" /></p>
-    <%}%>
-
-    </body>
+    <h1>Edited user!</h1>
+    <p>Your user was updated!</p>
+    <p>Username: <c:out value="${username}" /></p>
+    <p>User email: <c:out value="${email}" /></p>
+    <p style="color:red"><c:out value="${errorMessage}" /></p>
+</body>
 </html>

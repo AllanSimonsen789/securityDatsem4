@@ -10,19 +10,24 @@
 <%@ taglib prefix="fn" uri="http://java.sun.com/jsp/jstl/functions" %>
 <html>
   <head>
-    <title>Hello World</title>
+      <title>Hello World</title>
   </head>
   <body>
-  <h1>HelloWorld!</h1>
-  <p>Hello world - setup!</p>
-  <form action="/login">
-    <input type="submit" value="login" />
-  </form>
-  <form action="/register">
-    <input type="submit" value="register" />
-  </form>
-  <form action="/forum">
-    <input type="submit" value="Go To Forum" />
-  </form>
+    <h1>HelloWorld!</h1>
+    <p>Hello world - setup!</p>
+    <form action="/login">
+        <input type="submit" value="login"/>
+    </form>
+    <form action="/register">
+        <input type="submit" value="register"/>
+    </form>
+    <c:if test="${sessionScope.get('username') !=null}">
+        <form action="/edit">
+            <input type="submit" value="edit"/>
+        </form>
+    </c:if>
+    <form action="/forum">
+        <input type="submit" value="Go To Forum"/>
+    </form>
   </body>
 </html>
