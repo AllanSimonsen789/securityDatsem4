@@ -27,7 +27,7 @@ public class LoginController extends HttpServlet {
         }
 
         //Lav switch - login, logout, register på cmd.
-        UserMapper us = new UserMapper();
+        UserMapper us = UserMapper.getInstance();
 
         try{
             User user = us.Login(request.getParameter("loginname"), request.getParameter("password"));

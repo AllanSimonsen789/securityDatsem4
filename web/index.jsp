@@ -21,5 +21,8 @@
   <form action="/register">
     <input type="submit" value="register" />
   </form>
+  <form action="/forum">
+    <input type="submit" value="Go To Forum" />
+  </form>
   </body>
 </html>
