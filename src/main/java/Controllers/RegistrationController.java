@@ -51,7 +51,7 @@ public class RegistrationController extends HttpServlet {
                 request.setAttribute("username", registeredUser.getUserName());
                 request.setAttribute("id", registeredUser.getUserID());
                 request.setAttribute("email", registeredUser.getEmail());
-                request.setAttribute("created", "The user was created successfully!");
+                request.setAttribute("created", registeredUser.getCreationDate());
                 request.getRequestDispatcher("/WEB-INF/welcome.jsp").forward(request, response);
             }
         } catch (MySQLDuplicateEntryException e) {

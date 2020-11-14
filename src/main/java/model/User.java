@@ -2,6 +2,9 @@ package model;
 
 import org.mindrot.jbcrypt.BCrypt;
 
+import java.time.LocalDateTime;
+import java.time.ZoneId;
+import java.time.ZoneOffset;
 import java.util.Date;
 
 public class User {
@@ -10,7 +13,7 @@ public class User {
     private String password;
     private String email;
     private String role;
-    private Date creationDate;
+    private LocalDateTime creationDate;
 
     public User() { }// Temporary - delete later.
 
@@ -27,14 +30,14 @@ public class User {
         this.password = BCrypt.hashpw(password, BCrypt.gensalt(12));
         this.email = email;
         this.role = "user";
-        this.creationDate = new Date();
+        this.creationDate = LocalDateTime.now(ZoneId.of("Europe/Copenhagen"));
     }
 
     public long getUserID() { return userID; }
 
     public String getRole() { return role; }
 
-    public Date getCreationDate() { return creationDate; }
+    public LocalDateTime getCreationDate() { return creationDate; }
 
     public String getUserName() {
         return userName;
@@ -46,6 +49,10 @@ public class User {
 
     public String getEmail() {
         return email;
+    }
+
+    public void setCreationDate(LocalDateTime creationDate) {
+        this.creationDate = creationDate;
     }
 
     public void setUserName(String userName) {
