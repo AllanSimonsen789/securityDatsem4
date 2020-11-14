@@ -41,6 +41,16 @@
         <servlet-class>Controllers.ForumController</servlet-class>
     </servlet>
 
+    <servlet-mapping>
+        <servlet-name>PostController</servlet-name>
+        <url-pattern>/post</url-pattern>
+    </servlet-mapping>
+
+    <servlet>
+        <servlet-name>PostController</servlet-name>
+        <servlet-class>Controllers.PostController</servlet-class>
+    </servlet>
+
 <!--   ERROR HANDLING -->
     <error-page>
         <error-code>404</error-code>

@@ -33,6 +33,55 @@ public class ForumMapper {
         DBC = DBConnection.getInstance();
     }
 
+
+    public Post fetchPost(int id){
+        Post returnpost = null;
+        PreparedStatement pStmt = null;
+        Connection conn = null;
+        ResultSet rs = null;
+        ArrayList<Post> returnlist = new ArrayList<>();
+        try {
+            //Create connection
+            conn = DBC.getConnection();
+
+            //Prepared statement
+            String sql;
+            sql = "SELECT * FROM securityExam.posttabelwuser WHERE id = ?";
+            pStmt = conn.prepareStatement(sql);
+            pStmt.setLong(1, id);
+            rs = pStmt.executeQuery();
+
+            //Extract data from resultset
+            if (rs.next()){
+                //Retrieve by column name
+                long userid = rs.getLong("userid");
+                String username = rs.getString("username");
+                String title = rs.getString("title");
+                String content = rs.getString("content");
+                LocalDateTime posttime = LocalDateTime.of(1889,4,20,12,00);
+                try {
+                    posttime = rs.getTimestamp("posttime").toLocalDateTime();
+                } catch ( Exception e) {
+                    e.printStackTrace();
+                }
+                returnpost = new Post(id, userid, username, title, content, posttime);
+            }
+        } catch (SQLException e) {
+            e.printStackTrace();
+        } finally {
+            //finally block used to close resources
+            try {
+                rs.close();
+                pStmt.close();
+                conn.close();
+            } catch (SQLException | NullPointerException e) {
+                e.printStackTrace();
+            }
+        }
+
+        return returnpost;
+    }
+
     public ArrayList<Post> fetchPosts() {
         User sqlBuildUser = new User();
         PreparedStatement pStmt = null;

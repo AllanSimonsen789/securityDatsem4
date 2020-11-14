@@ -27,11 +27,11 @@
     <p>The forum has <c:out value="${arraylen}" /> posts</p></br>
     <c:forEach var="post" items="${postlist}">
         </br></br>
-        <strong>Title: <c:out value="${post.getPostTitle()}"/></strong></br>
+        <a href = "/post?post=<c:out value="${post.getPostID()}"/>"><strong>Title: <c:out value="${post.getPostTitle()}"/></strong></br>
         ID: <c:out value="${post.getPostID()}"/> Posted by: <c:out value="${post.getUsername()}"/></br>
         Message Content: </br>
         <c:out value="${post.getContens()}"/></br>
-        Posted on: <c:out value="${post.getCreationDate()}"/></br>
+        Posted on: <c:out value="${post.getCreationDate()}"/></a></br>
     </c:forEach>
 </body>
 </html>
