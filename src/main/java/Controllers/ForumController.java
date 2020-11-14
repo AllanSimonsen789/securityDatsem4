@@ -1,24 +1,42 @@
 package Controllers;
 
 import Database.ForumMapper;
-import Database.UserMapper;
 import ExtraClasses.SecureRandomString;
-import ExtraClasses.VerifyRecaptcha;
 import model.Post;
-import model.User;
+import Exception.ForumException;
 
 import javax.servlet.ServletException;
 import javax.servlet.annotation.WebServlet;
 import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
+import javax.servlet.http.HttpSession;
 import java.io.IOException;
+import java.time.LocalDateTime;
+import java.time.ZoneId;
+import java.time.ZoneOffset;
 import java.util.ArrayList;
 
 @WebServlet(name = "ForumController")
 public class ForumController extends HttpServlet {
     protected void doPost(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
-        doGet(request,response);
+        request.setAttribute("web_csrf_token", SecureRandomString.genSecureRandomString());
+        try {
+
+            String title = request.getParameter("title");
+            String content = request.getParameter("content");
+            int userid = Integer.parseInt(request.getParameter("userid"));
+            LocalDateTime created = LocalDateTime.now(ZoneId.of("Europe/Copenhagen"));
+            Post newPost = new Post(userid, title, content, created);
+
+            ForumMapper fm = ForumMapper.getInstance();
+            newPost = fm.createPost(newPost);
+            request.setAttribute("confirmation", "The post was succesfully created with id: " + newPost.getPostID());
+            doGet(request, response);
+        } catch (ForumException e) {
+            request.setAttribute("errorMessage", "Something went wrong");
+            request.getRequestDispatcher("/WEB-INF/forum.jsp").forward(request, response);
+        }
     }
 
     protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {

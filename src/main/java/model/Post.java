@@ -19,6 +19,25 @@ public class Post {
         this.creationDate = creationDate;
     }
 
+    public Post(int userID, String postTitle, String contens, LocalDateTime creationDate) {
+        this.userID = userID;
+        this.postTitle = postTitle;
+        this.contens = contens;
+        this.creationDate = creationDate;
+    }
+
+    public void setPostID(long postID) {
+        this.postID = postID;
+    }
+
+    public void setUserID(long userID) {
+        this.userID = userID;
+    }
+
+    public void setUsername(String username) {
+        this.username = username;
+    }
+
     public long getPostID() {
         return postID;
     }

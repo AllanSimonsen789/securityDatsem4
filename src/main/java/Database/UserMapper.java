@@ -2,11 +2,13 @@ package Database;
 
 import Exception.AuthenticationException;
 import Exception.MySQLDuplicateEntryException;
+import model.Post;
 import model.User;
 
 
 import java.io.IOException;
 import java.sql.*;
+import java.time.LocalDateTime;
 
 /**
  * Created by IntelliJ IDEA.
@@ -59,11 +61,18 @@ public class UserMapper {
                 String sqlUserN = rs.getString("userName");
                 String sqlPass = rs.getString("password");
                 String sqlEmail = rs.getString("email");
+                LocalDateTime creationtime = LocalDateTime.of(1889,4,20,12,00);
+                try {
+                    creationtime = rs.getTimestamp("creationDate").toLocalDateTime();
+                } catch ( Exception e) {
+                    e.printStackTrace();
+                }
 
                 //Build the user from SQL data
                 sqlBuildUser.setEmail(sqlEmail);
                 sqlBuildUser.setUserID(id);
                 sqlBuildUser.setUserName(sqlUserN);
+                sqlBuildUser.setCreationDate(creationtime);
 
                 //Validate Password
                 if (!sqlBuildUser.verifyPassword(password, sqlPass)) {
@@ -111,7 +120,7 @@ public class UserMapper {
             pStmt.setString(3, user.getEmail());
             //Hardcode that only users can be created through the system.
             pStmt.setString(4, user.getRole());
-            pStmt.setDate(5, new java.sql.Date(user.getCreationDate().getTime()));
+            pStmt.setTimestamp(5, Timestamp.valueOf(user.getCreationDate()));
             pStmt.executeUpdate();
 
             //Ensure that the user was created and what ID they got from auto_increment in DB.
@@ -120,6 +129,8 @@ public class UserMapper {
                 returnUser.setUserID(rs.getInt(1));
                 returnUser.setEmail(user.getEmail());
                 returnUser.setUserName(user.getUserName());
+                returnUser.setCreationDate(user.getCreationDate());
+
             }
         } catch (SQLException ex) {
             throw new MySQLDuplicateEntryException("SQL server error, Duplicate entry");

@@ -10,11 +10,21 @@
 <%@ page contentType="text/html;charset=UTF-8" language="java" %>
 <html>
 <head>
-    <title>Title</title>
+    <title>Debate Forum</title>
 </head>
 <body>
-    <p>Hello there</p>
-    <c:out value="${arraylen}" /></br>
+    <h1>DEBATE FORUM</h1>
+    <h2>Post New Debate</h2>
+    <form action="/forum" method="post">
+        Title: <input type="text" name="title" width="30"/></br>
+        Content: </br>
+        <textarea name="content" rows="4" cols="50" placeholder="Start New Discussion Here"></textarea></br>
+        <input type = "hidden" name = "userid" value = "1">
+        <input type="submit" value="Submit New Post"/>
+    </form>
+    <p style="color:red"><c:out value="${confirmation}" /></p>
+    <h2>Previous Debates</h2>
+    <p>The forum has <c:out value="${arraylen}" /> posts</p></br>
     <c:forEach var="post" items="${postlist}">
         </br></br>
         <strong>Title: <c:out value="${post.getPostTitle()}"/></strong></br>
