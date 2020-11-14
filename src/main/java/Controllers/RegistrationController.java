@@ -27,7 +27,8 @@ public class RegistrationController extends HttpServlet {
     protected void doPost(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
         try {
             //Get form data
-            String userName = request.getParameter("loginname");
+            String userName = request.getParameter("loginname").trim();
+            //We trim to ensure that we won't have 2 usernames in the DB like; "Tobias", " Tobias".
             String email = request.getParameter("email");
             String password = request.getParameter("password");
             String gRecaptchaResponse = request
