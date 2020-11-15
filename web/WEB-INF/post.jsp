@@ -26,11 +26,18 @@
     <p style="color:red"><c:out value="${confirmation}" /></p>
 
     <h2>Make a reply</h2></br>
-    <form action="/post?post=<c:out value="${post.getPostID()}"/>" method="post">
-        <textarea name="content" rows="4" cols="50" placeholder="Make a reply here"></textarea></br>
-        <input type = "hidden" name = "userid" value = "1">
-        <input type = "hidden" name = "postid" value = "<c:out value="${post.getPostID()}"/>">
-        <input type="submit" value="Submit Reply"/>
-    </form>
+    <c:choose>
+        <c:when test="${sessionScope.get('username') !=null}">
+            <form action="/post?post=<c:out value="${post.getPostID()}"/>" method="post">
+                <textarea name="content" rows="4" cols="50" placeholder="Make a reply here"></textarea></br>
+                <input type = "hidden" name = "userid" value = "1">
+                <input type = "hidden" name = "postid" value = "<c:out value="${post.getPostID()}"/>">
+                <input type="submit" value="Submit Reply"/>
+            </form>
+        </c:when>
+        <c:otherwise>
+            <p>Please login to reply to this debate!</p>
+        </c:otherwise>
+    </c:choose>
 </body>
 </html>

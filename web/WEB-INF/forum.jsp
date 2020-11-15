@@ -15,13 +15,19 @@
 <body>
     <h1>DEBATE FORUM</h1>
     <h2>Post New Debate</h2>
-    <form action="/forum" method="post">
-        Title: <input type="text" name="title" width="30"/></br>
-        Content: </br>
-        <textarea name="content" rows="4" cols="50" placeholder="Start New Discussion Here"></textarea></br>
-        <input type = "hidden" name = "userid" value = "1">
-        <input type="submit" value="Submit New Post"/>
-    </form>
+    <c:choose>
+        <c:when test="${sessionScope.get('username') !=null}">
+            <form action="/forum" method="post">
+                Title: <input type="text" name="title" width="30"/></br>
+                Content: </br>
+                <textarea name="content" rows="4" cols="50" placeholder="Start New Discussion Here"></textarea></br>
+                <input type="submit" value="Submit New Post"/>
+            </form>
+        </c:when>
+        <c:otherwise>
+            <p>Please login to post a new debate!</p>
+        </c:otherwise>
+    </c:choose>
     <p style="color:red"><c:out value="${confirmation}" /></p>
     <h2>Previous Debates</h2>
     <p>The forum has <c:out value="${arraylen}" /> posts</p></br>

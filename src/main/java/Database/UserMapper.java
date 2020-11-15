@@ -2,7 +2,6 @@ package Database;
 
 import Exception.AuthenticationException;
 import Exception.MySQLDuplicateEntryException;
-import model.Post;
 import model.User;
 
 
@@ -131,7 +130,6 @@ public class UserMapper {
                 returnUser.setEmail(user.getEmail());
                 returnUser.setUserName(user.getUserName());
                 returnUser.setCreationDate(user.getCreationDate());
-
             }
         } catch (SQLException ex) {
             throw new MySQLDuplicateEntryException("SQL server error, Duplicate entry");
@@ -219,7 +217,7 @@ public class UserMapper {
                 if (rs != null) {
                     rs.close();
                 }
-                pStmt.close(); 
+                pStmt.close();
                 conn.close();
             } catch (SQLException e) {
                 e.printStackTrace();

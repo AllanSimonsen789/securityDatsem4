@@ -4,6 +4,7 @@ import Database.ForumMapper;
 import ExtraClasses.SecureRandomString;
 import model.Post;
 import Exception.ForumException;
+import model.User;
 
 import javax.servlet.ServletException;
 import javax.servlet.annotation.WebServlet;
@@ -22,10 +23,11 @@ public class ForumController extends HttpServlet {
     protected void doPost(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
         request.setAttribute("web_csrf_token", SecureRandomString.genSecureRandomString());
         try {
-
             String title = request.getParameter("title");
             String content = request.getParameter("content");
-            int userid = Integer.parseInt(request.getParameter("userid"));
+            HttpSession session = request.getSession();
+            User sessionUser = (User) session.getAttribute("username");
+            int userid = (int) sessionUser.getUserID();
             LocalDateTime created = LocalDateTime.now(ZoneId.of("Europe/Copenhagen"));
             Post newPost = new Post(userid, title, content, created);
 

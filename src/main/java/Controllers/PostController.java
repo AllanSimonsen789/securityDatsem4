@@ -6,12 +6,14 @@ import Exception.ForumException;
 import ExtraClasses.SecureRandomString;
 import model.Post;
 import model.Reply;
+import model.User;
 
 import javax.servlet.ServletException;
 import javax.servlet.annotation.WebServlet;
 import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
+import javax.servlet.http.HttpSession;
 import java.io.IOException;
 import java.time.LocalDateTime;
 import java.time.ZoneId;
@@ -23,7 +25,9 @@ public class PostController extends HttpServlet {
         request.setAttribute("web_csrf_token", SecureRandomString.genSecureRandomString());
         try {
             String content = request.getParameter("content");
-            int userid = Integer.parseInt(request.getParameter("userid"));
+            HttpSession session = request.getSession();
+            User sessionUser = (User) session.getAttribute("username");
+            int userid = (int) sessionUser.getUserID();
             int postid = Integer.parseInt(request.getParameter("postid"));
             System.out.println(userid + " " + postid);
             Reply newReply = new Reply(userid, postid, content);
