@@ -24,10 +24,16 @@
     <title>Successful edit</title>
 </head>
 <body>
-    <h1>Edited user!</h1>
-    <p>Your user was updated!</p>
+    <h1>Successful</h1>
+    <p>Your user information was updated!</p>
     <p>Username: <c:out value="${username}" /></p>
     <p>User email: <c:out value="${email}" /></p>
     <p style="color:red"><c:out value="${errorMessage}" /></p>
+    <form action="/forum">
+        <input type="submit" value="Go to the Forum" />
+    </form>
+    <form action="/index.jsp">
+        <input type="submit" value="Back to frontpage" />
+    </form>
 </body>
 </html>

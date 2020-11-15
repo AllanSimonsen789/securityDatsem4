@@ -14,6 +14,9 @@
 </head>
 <body>
     <h1>DEBATE FORUM</h1>
+    <form action="/index.jsp">
+        <input type="submit" value="Back to frontpage" />
+    </form>
     <h2>Post New Debate</h2>
     <c:choose>
         <c:when test="${sessionScope.get('username') !=null}">
@@ -30,10 +33,10 @@
     </c:choose>
     <p style="color:blue"><c:out value="${confirmation}" /></p>
     <h2>Previous Debates</h2>
-    <p>The forum has <c:out value="${arraylen}" /> posts</p></br>
+    <p>The forum has <c:out value="${arraylen}" /> posts</p>
     <c:forEach var="post" items="${postlist}">
         </br></br>
-        <a href = "/post?post=<c:out value="${post.getPostID()}"/>"><strong>Title: <c:out value="${post.getPostTitle()}"/></strong></br>
+        <a style = "color: inherit;" href = "/post?post=<c:out value="${post.getPostID()}"/>"><strong>Title: <c:out value="${post.getPostTitle()}"/></strong></br>
         ID: <c:out value="${post.getPostID()}"/> Posted by: <c:out value="${post.getUsername()}"/></br>
         Message Content: </br>
         <c:out value="${post.getContens()}"/></br>

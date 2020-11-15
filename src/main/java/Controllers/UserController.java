@@ -125,6 +125,7 @@ public class UserController extends HttpServlet {
             //We trim to ensure that we won't have 2 usernames in the DB like; "Tobias", " Tobias".
             String newEmail = request.getParameter("newEmail");
             String newPassword = request.getParameter("newPassword");
+            String newPasswordR = request.getParameter("newPassword2");
             String gRecaptchaResponse = request
                     .getParameter("g-recaptcha-response");
             //Check for fields that have been filled out correctly
@@ -133,8 +134,8 @@ public class UserController extends HttpServlet {
             if (newEmail != ""){
                 emailCheck = RegistrationHelper.checkEmail(newEmail);
             }
-            if (newPassword != ""){
-                passwordCheck = RegistrationHelper.checkPassword(newPassword);
+            if(newPassword == null || newPasswordR == null || !newPassword.equals(newPasswordR)){
+                throw new RegistrationException("The passwords do not match");
             }
             //Check re-capcha & Password strength & Email
             if (VerifyRecaptcha.verify(gRecaptchaResponse) && emailCheck && passwordCheck) {

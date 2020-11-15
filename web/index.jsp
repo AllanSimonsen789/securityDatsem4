@@ -10,11 +10,12 @@
 <%@ taglib prefix="fn" uri="http://java.sun.com/jsp/jstl/functions" %>
 <html>
   <head>
-      <title>Hello World</title>
+      <title>Debateit</title>
   </head>
   <body>
-    <h1>HelloWorld!</h1>
-    <p>Hello world - setup!</p>
+    <h1>Debateit</h1>
+    <h3>Welcome to Debateit.</h3>
+    <p>To make a post or reply you need to login or register as a user</p>
     <c:choose>
         <c:when test="${sessionScope.get('username') ==null}">
             <form action="/login">

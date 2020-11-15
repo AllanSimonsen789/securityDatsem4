@@ -26,14 +26,19 @@
     <title>Welcome</title>
 </head>
 <body>
-    <h1>Welcome!</h1>
-    <p>Dear: <c:out value="${username}" /></p>
-    <p>Your Email is <c:out value="${email}" /></p>
-    <p>Your id is <c:out value="${id}" /></p>
-
+    <h1>Welcome <c:out value="${username}" />!</h1>
+    <p>User ID: <c:out value="${id}" /></p>
+    <p>Email: <c:out value="${email}" /></p>
     <% if(request.getAttribute("created") != null){ %>
     <p><c:out value="${created}" /></p>
     <%}%>
+    <p>Welcome to debateit, to continue your journey head over to the forum or go back to the main page</p>
+    <form action="/forum">
+        <input type="submit" value="Go to the Forum" />
+    </form>
+    <form action="/index.jsp">
+        <input type="submit" value="Back to frontpage" />
+    </form>
 
     </body>
 </html>

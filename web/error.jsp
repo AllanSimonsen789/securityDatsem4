@@ -7,6 +7,8 @@
   Reference: https://cheatsheetseries.owasp.org/cheatsheets/Error_Handling_Cheat_Sheet.html
 --%>
 <%@ page language="java" isErrorPage="true" contentType="text/html;charset=UTF-8" %>
+<%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
+
 <%--<%--%>
 <%--String errorMessage = exception.getMessage();--%>
 <%--//Log the exception via the content of the implicit variable named "exception"--%>
@@ -23,6 +25,7 @@
     <title>Error Page</title>
 </head>
 <body>
+<img alt="Error" src="https://starecat.com/content/wp-content/uploads/windows-xp-task-failed-successfully-warning-information.jpg" style="width: 200px; height: 130px;"></br>
 <% if(response.getStatus() >= 500){ %>
 Internal server error, error code is <%=response.getStatus() %><br>
 Please go to <a href="/index.jsp">home page</a> And try again later ;)

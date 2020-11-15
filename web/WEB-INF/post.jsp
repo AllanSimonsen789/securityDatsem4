@@ -13,7 +13,14 @@
     <title>Debate Forum</title>
 </head>
 <body>
-    <h1><c:out value="${post.getPostTitle()}"/></h1>
+    <h1>Forum Post</h1>
+    <form action="/index.jsp">
+        <input type="submit" value="Back to frontpage" />
+    </form>
+    <form action="/forum">
+        <input type="submit" value="Back to the forum" />
+    </form>
+    <h2><c:out value="${post.getPostTitle()}"/></h2>
     <h3>ID: <c:out value="${post.getUserID()}"/> - Posted By: <c:out value="${post.getUsername()}"/> - Posted On: <c:out value="${post.getCreationDate()}"/></h3>
     <p><c:out value="${post.getContens()}"/></p>
 
@@ -25,13 +32,12 @@
     </c:forEach>
     <p style="color:blue"><c:out value="${confirmation}" /></p>
 
-    <h2>Make a reply</h2></br>
+    <h2>Make a reply</h2>
     <c:choose>
         <c:when test="${sessionScope.get('username') !=null}">
             <form action="/post?post=<c:out value="${post.getPostID()}"/>" method="post">
                 <textarea name="content" rows="4" cols="50" placeholder="Make a reply here"></textarea></br>
-                <input type = "hidden" name = "userid" value = "1">
-                <input type = "hidden" name = "postid" value = "<c:out value="${post.getPostID()}"/>">
+                <input type = "hidden" name = "postid" value = "<c:out value="${post.getPostID()}"/>"></br>
                 <input type="submit" value="Submit Reply"/>
             </form>
         </c:when>
