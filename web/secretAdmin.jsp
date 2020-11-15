@@ -17,7 +17,9 @@
     } else {
         // log noget her...
         // Nogen prøvede at komme ind på admin page.
-        response.sendRedirect("/index.jsp");
+        // response.sendRedirect("/index.jsp");
+        response.setStatus(403);
+        request.getRequestDispatcher("/error.jsp").forward(request, response);
     }
 %>
 <%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>

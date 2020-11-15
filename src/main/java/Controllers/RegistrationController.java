@@ -52,7 +52,7 @@ public class RegistrationController extends HttpServlet {
                 request.setAttribute("id", registeredUser.getUserID());
                 request.setAttribute("email", registeredUser.getEmail());
                 request.setAttribute("created", registeredUser.getCreationDate());
-                request.getRequestDispatcher("/WEB-INF/welcome.jsp").forward(request, response);
+                request.getRequestDispatcher("/WEB-INF/profilePage.jsp").forward(request, response);
             }
         } catch (MySQLDuplicateEntryException e) {
             request.setAttribute("errorMessage", "This username allready exists");

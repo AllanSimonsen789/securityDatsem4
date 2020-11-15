@@ -26,20 +26,16 @@
             <form action="/logout">
                 <input type="submit" value="Logout"/>
             </form>
-        </c:otherwise>
-    </c:choose>
-    <c:choose>
-        <c:when test="${sessionScope.get('username') ==null}">
-            <form action="/register">
-                <input type="submit" value="Register As New User"/>
-            </form>
-        </c:when>
-        <c:otherwise>
-            <form action="/edit">
-                <input type="submit" value="Edit User"/>
+            <form action="/profile">
+                <input type="submit" value="Go To Profile Page"/>
             </form>
         </c:otherwise>
     </c:choose>
+    <c:if test="${sessionScope.get('username') ==null}">
+        <form action="/register">
+            <input type="submit" value="Register As New User"/>
+        </form>
+    </c:if>
     <form action="/forum">
         <input type="submit" value="Go To Forum"/>
     </form>

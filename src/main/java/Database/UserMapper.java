@@ -46,7 +46,7 @@ public class UserMapper {
 
             //Prepared statement
             String sql;
-            sql = "SELECT id, userName, password, email, role " +
+            sql = "SELECT * " +
                     "FROM userstable " +
                     "WHERE email LIKE? " +
                     "LIMIT 1";

@@ -62,6 +62,16 @@
         <servlet-class>Controllers.PostController</servlet-class>
     </servlet>
 
+    <servlet-mapping>
+        <servlet-name>profileController</servlet-name>
+        <url-pattern>/profile</url-pattern>
+    </servlet-mapping>
+
+    <servlet>
+        <servlet-name>profileController</servlet-name>
+        <servlet-class>Controllers.profileController</servlet-class>
+    </servlet>
+
 <!--   ERROR HANDLING -->
     <error-page>
         <error-code>404</error-code>

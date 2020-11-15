@@ -61,11 +61,8 @@ public class UserController extends HttpServlet {
                         session = request.getSession(true);
                         // generate a new session
                         session.setAttribute("username", user);
-
-                        request.setAttribute("username", user.getUserName());
-                        request.setAttribute("id", user.getUserID());
-                        request.setAttribute("email", user.getEmail());
-                        request.getRequestDispatcher("/WEB-INF/welcome.jsp").forward(request, response);
+                        response.sendRedirect("/profile");
+                        //request.getRequestDispatcher("/WEB-INF/profilePage.jsp").forward(request, response);
                     }else{
                         throw new AuthenticationException("SoMeThInG WeNt WrOnG :(");
                     }
@@ -107,11 +104,9 @@ public class UserController extends HttpServlet {
                         session = request.getSession(true);
                         session.setAttribute("username", registeredUser);
                         //Return attributes
-                        request.setAttribute("username", registeredUser.getUserName());
-                        request.setAttribute("id", registeredUser.getUserID());
-                        request.setAttribute("email", registeredUser.getEmail());
+                        request.setAttribute("user", registeredUser);
                         request.setAttribute("created", "The user was created successfully!");
-                        request.getRequestDispatcher("/WEB-INF/welcome.jsp").forward(request, response);
+                        request.getRequestDispatcher("/WEB-INF/profilePage.jsp").forward(request, response);
                     }else{
                         throw new RegistrationException("Something went wrong");
                     }

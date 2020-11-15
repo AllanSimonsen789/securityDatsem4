@@ -51,7 +51,7 @@ public class LoginController extends HttpServlet {
                 request.setAttribute("username", user.getUserName());
                 request.setAttribute("id", user.getUserID());
                 request.setAttribute("email", user.getEmail());
-                request.getRequestDispatcher("/WEB-INF/welcome.jsp").forward(request, response);
+                request.getRequestDispatcher("/WEB-INF/profilePage.jsp").forward(request, response);
             }else{
                 throw new AuthenticationException("SoMeThInG WeNt WrOnG :(");
             }
