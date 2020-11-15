@@ -46,7 +46,7 @@ public class UserMapper {
 
             //Prepared statement
             String sql;
-            sql = "SELECT id, userName, password, email " +
+            sql = "SELECT id, userName, password, email, role " +
                     "FROM userstable " +
                     "WHERE userName LIKE? " +
                     "LIMIT 1";
@@ -61,6 +61,7 @@ public class UserMapper {
                 String sqlUserN = rs.getString("userName");
                 String sqlPass = rs.getString("password");
                 String sqlEmail = rs.getString("email");
+                String sqlRole = rs.getString("role");
                 LocalDateTime creationtime = LocalDateTime.of(1889,4,20,12,00);
                 try {
                     creationtime = rs.getTimestamp("creationDate").toLocalDateTime();
@@ -72,6 +73,7 @@ public class UserMapper {
                 sqlBuildUser.setEmail(sqlEmail);
                 sqlBuildUser.setUserID(id);
                 sqlBuildUser.setUserName(sqlUserN);
+                sqlBuildUser.setRole(sqlRole);
                 sqlBuildUser.setCreationDate(creationtime);
 
                 //Validate Password
@@ -129,6 +131,7 @@ public class UserMapper {
                 returnUser.setUserID(rs.getInt(1));
                 returnUser.setEmail(user.getEmail());
                 returnUser.setUserName(user.getUserName());
+                returnUser.setRole(user.getRole());
                 returnUser.setCreationDate(user.getCreationDate());
             }
         } catch (SQLException ex) {
