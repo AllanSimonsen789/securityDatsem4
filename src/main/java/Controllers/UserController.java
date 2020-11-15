@@ -40,6 +40,7 @@ public class UserController extends HttpServlet {
                 //Lav switch - login, logout, register på cmd.
                 UserMapper us = UserMapper.getInstance();
                 try{
+                    request.setAttribute("loginname", request.getParameter("loginname"));
                     User user = us.Login(request.getParameter("loginname"), request.getParameter("password"));
                     String gRecaptchaResponse = request
                             .getParameter("g-recaptcha-response");
@@ -75,16 +76,20 @@ public class UserController extends HttpServlet {
                     String userName = request.getParameter("loginname").trim();
                     //We trim to ensure that we won't have 2 usernames in the DB like; "Tobias", " Tobias".
                     String email = request.getParameter("email");
+                    request.setAttribute("loginname", request.getParameter("loginname"));
+                    request.setAttribute("email", request.getParameter("email"));
                     String password = request.getParameter("password");
                     String passwordR = request.getParameter("password2");
-                    if(password == null || passwordR == null || !password.equals(passwordR)){
-                        throw new RegistrationException("The passwords do not match");
-                    }
                     String gRecaptchaResponse = request
                             .getParameter("g-recaptcha-response");
                     //Check re-capcha & Password strength & Email
-                    if (VerifyRecaptcha.verify(gRecaptchaResponse)
-                            && RegistrationHelper.checkPassword(password)
+                    if(password == null || passwordR == null || !password.equals(passwordR)){
+                        throw new RegistrationException("The passwords do not match");
+                    }
+                    if (!VerifyRecaptcha.verify(gRecaptchaResponse)){
+                        throw new RegistrationException("Recpathca not done correctly");
+                    }
+                    if(RegistrationHelper.checkPassword(password)
                             && RegistrationHelper.checkEmail(email)) {
                         //Create user in DB
                         UserMapper um = UserMapper.getInstance();
@@ -100,6 +105,8 @@ public class UserController extends HttpServlet {
                         request.setAttribute("email", registeredUser.getEmail());
                         request.setAttribute("created", "The user was created successfully!");
                         request.getRequestDispatcher("/WEB-INF/welcome.jsp").forward(request, response);
+                    }else{
+                        throw new RegistrationException("Something went wrong");
                     }
                 } catch (MySQLDuplicateEntryException e) {
                     request.setAttribute("errorMessage", "This username allready exists");
@@ -126,9 +133,14 @@ public class UserController extends HttpServlet {
             String newEmail = request.getParameter("newEmail");
             String newPassword = request.getParameter("newPassword");
             String newPasswordR = request.getParameter("newPassword2");
+            request.setAttribute("loginname", request.getParameter("loginname"));
+            request.setAttribute("email", request.getParameter("loginname"));
             String gRecaptchaResponse = request
                     .getParameter("g-recaptcha-response");
             //Check for fields that have been filled out correctly
+            if(newUsername.length() == 0 && newPassword.length() == 0 && newEmail.length() == 0){
+                throw new RegistrationException("Nothing changed");
+            }
             boolean emailCheck = true;
             boolean passwordCheck = true;
             if (newEmail != ""){
@@ -138,7 +150,10 @@ public class UserController extends HttpServlet {
                 throw new RegistrationException("The passwords do not match");
             }
             //Check re-capcha & Password strength & Email
-            if (VerifyRecaptcha.verify(gRecaptchaResponse) && emailCheck && passwordCheck) {
+            if (!VerifyRecaptcha.verify(gRecaptchaResponse)){
+                throw new RegistrationException("Captacha nOT DonE")   ;
+            }
+            if( emailCheck && passwordCheck) {
                 //Get logged-in/createdUser from session.
                 UserMapper um = UserMapper.getInstance();
                 HttpSession session = request.getSession();

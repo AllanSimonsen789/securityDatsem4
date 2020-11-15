@@ -20,9 +20,9 @@
     </form>
     <p>Change username, contact email or password.</p>
     <form action="/edit" method="post">
-        New username: <input type="text" name="newUsername" width="30" /></br></br>
-        New email: <input type="text" name="newEmail" width="30" /></br></br>
-        Nassword: <input type="password" name="newPassword" width="10" min="12" max="200" /></br></br>
+        New username: <input type="text" name="newUsername" width="30" value = "<c:out value="${newUsername}" />"/></br></br>
+        New email: <input type="text" name="newEmail" width="30" value = "<c:out value="${newEmail}" />"/></br></br>
+        New password: <input type="password" name="newPassword" width="10" min="12" max="200" /></br></br>
         Retype password: <input type="password" name="newPassword2" placeholder="Retype Password" width="10"min="12" max="200" /></br></br>
         <div class = "tooltip">Password Requirements
             <span class = "tooltiptext"> Atleast 1 uppercase letter <br> Atleast 1 lowercase letter <br> Atleast 1 Number <br> Atleast 12 characters long </span>

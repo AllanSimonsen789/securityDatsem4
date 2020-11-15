@@ -20,8 +20,8 @@
         <input type="submit" value="Back to frontpage" />
     </form>
     <form action="/register" method="post">
-        username: <input type="text" name="loginname" width="30" min="5" max="50" required/></br></br>
-        email:     <input type="text" name="email" width="30" required/></br></br>
+        username: <input type="text" name="loginname" width="30" min="5" max="50" value = "<c:out value="${loginname}" />" required/></br></br>
+        email:     <input type="text" name="email" width="30" value="<c:out value="${email}" />" required/></br></br>
         password: <input type="password" name="password" width="10" min="12" max="200" required/></br></br>
         Retype password: <input type="password" name="password2" placeholder="Retype Password" width="10"min="12" max="200" required/></br></br>
         <div class = "tooltip">Password Requirements

@@ -23,7 +23,7 @@
             <form action="/forum" method="post">
                 Title: <input type="text" name="title" width="30"/></br>
                 Content: </br>
-                <textarea name="content" rows="4" cols="50" placeholder="Start New Discussion Here"></textarea></br>
+                <textarea name="content" rows="4" cols="50" placeholder="Start New Discussion Here"></textarea></br></br>
                 <input type="submit" value="Submit New Post"/>
             </form>
         </c:when>
