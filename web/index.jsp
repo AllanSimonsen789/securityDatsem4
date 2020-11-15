@@ -15,17 +15,30 @@
   <body>
     <h1>HelloWorld!</h1>
     <p>Hello world - setup!</p>
-    <form action="/login">
-        <input type="submit" value="login"/>
-    </form>
-    <form action="/register">
-        <input type="submit" value="register"/>
-    </form>
-    <c:if test="${sessionScope.get('username') !=null}">
-        <form action="/edit">
-            <input type="submit" value="edit"/>
-        </form>
-    </c:if>
+    <c:choose>
+        <c:when test="${sessionScope.get('username') ==null}">
+            <form action="/login">
+                <input type="submit" value="Login"/>
+            </form>
+        </c:when>
+        <c:otherwise>
+            <form action="/logout">
+                <input type="submit" value="Logout"/>
+            </form>
+        </c:otherwise>
+    </c:choose>
+    <c:choose>
+        <c:when test="${sessionScope.get('username') ==null}">
+            <form action="/register">
+                <input type="submit" value="Register As New User"/>
+            </form>
+        </c:when>
+        <c:otherwise>
+            <form action="/edit">
+                <input type="submit" value="Edit User"/>
+            </form>
+        </c:otherwise>
+    </c:choose>
     <form action="/forum">
         <input type="submit" value="Go To Forum"/>
     </form>

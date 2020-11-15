@@ -34,6 +34,13 @@ public class ForumController extends HttpServlet {
             ForumMapper fm = ForumMapper.getInstance();
             newPost = fm.createPost(newPost);
             request.setAttribute("confirmation", "The post was succesfully created with id: " + newPost.getPostID());
+
+            //Renew session id.
+            session.invalidate();
+            session = request.getSession(true);
+            session.setAttribute("username", sessionUser);
+
+            //ForceReload the page
             doGet(request, response);
         } catch (ForumException e) {
             request.setAttribute("errorMessage", "Something went wrong");

@@ -29,13 +29,17 @@ public class PostController extends HttpServlet {
             User sessionUser = (User) session.getAttribute("username");
             int userid = (int) sessionUser.getUserID();
             int postid = Integer.parseInt(request.getParameter("postid"));
-            System.out.println(userid + " " + postid);
             Reply newReply = new Reply(userid, postid, content);
 
             ReplyMapper rm = ReplyMapper.getInstance();
             newReply = rm.createReply(newReply);
             request.setAttribute("confirmation", "The reply was succesfully created with id: " + newReply.getReplyID());
-            System.out.println(request.getRequestURL().toString());
+
+            //Renew session id.
+            session.invalidate();
+            session = request.getSession(true);
+            session.setAttribute("username", sessionUser);
+
             response.sendRedirect(request.getRequestURL().toString() + "?post=" + postid);
         } catch (ForumException e) {
             e.printStackTrace();

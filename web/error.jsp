@@ -31,6 +31,10 @@ Please go to <a href="/index.jsp">home page</a> And try again later ;)
 Unknown URL<br>
 Please go to <a href="/index.jsp">home page</a>
 
+<%}else if (response.getStatus() == 403){%>
+No access unless logged in<br>
+Please go to <a href="/index.jsp">home page</a>
+
 <%}else if (response.getStatus() >= 400){%>
 Unknown Error: error code is <%=response.getStatus()%><br>
 Please go to <a href="/index.jsp">home page</a>

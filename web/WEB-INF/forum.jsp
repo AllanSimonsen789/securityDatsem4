@@ -28,7 +28,7 @@
             <p>Please login to post a new debate!</p>
         </c:otherwise>
     </c:choose>
-    <p style="color:red"><c:out value="${confirmation}" /></p>
+    <p style="color:blue"><c:out value="${confirmation}" /></p>
     <h2>Previous Debates</h2>
     <p>The forum has <c:out value="${arraylen}" /> posts</p></br>
     <c:forEach var="post" items="${postlist}">
