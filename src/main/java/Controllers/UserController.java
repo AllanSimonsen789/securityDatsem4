@@ -40,12 +40,16 @@ public class UserController extends HttpServlet {
                 //Lav switch - login, logout, register på cmd.
                 UserMapper us = UserMapper.getInstance();
                 try{
-                    request.setAttribute("loginname", request.getParameter("loginname"));
-                    User user = us.Login(request.getParameter("loginname"), request.getParameter("password"));
-                    String gRecaptchaResponse = request
-                            .getParameter("g-recaptcha-response");
-                    boolean verify = VerifyRecaptcha.verify(gRecaptchaResponse);
-                    if(user != null && verify) {
+                    String inputEmail = request.getParameter("email");
+                    request.setAttribute("email", inputEmail);
+                    if (inputEmail.length() == 0 && !RegistrationHelper.checkEmail(inputEmail)){
+                        throw new RegistrationException("Email is not valid");
+                    }
+                    if (!VerifyRecaptcha.verify(request.getParameter("g-recaptcha-response"))){
+                        throw new RegistrationException("Recaptha not done");
+                    }
+                    User user = us.Login(inputEmail, request.getParameter("password"));
+                    if(user != null) {
                         //Login sucsessfull. Username and hashed psw are correct.
 
                         // get current session
@@ -67,6 +71,9 @@ public class UserController extends HttpServlet {
                     }
                 }catch (AuthenticationException e){
                     request.setAttribute("errorMessage", "Invalid login and password. Try again");
+                    request.getRequestDispatcher("/WEB-INF/login.jsp").forward(request, response);
+                } catch (RegistrationException e) {
+                    request.setAttribute("errorMessage", e.getMessage());
                     request.getRequestDispatcher("/WEB-INF/login.jsp").forward(request, response);
                 }
                 break;

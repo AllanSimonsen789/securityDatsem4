@@ -21,9 +21,9 @@
     <c:choose>
         <c:when test="${sessionScope.get('username') !=null}">
             <form action="/forum" method="post">
-                Title: <input type="text" name="title" width="30"/></br>
+                Title: <input type="text" name="title" width="30" required/></br>
                 Content: </br>
-                <textarea name="content" rows="4" cols="50" placeholder="Start New Discussion Here"></textarea></br></br>
+                <textarea name="content" rows="4" cols="50" placeholder="Start New Discussion Here" style="resize: none;" required></textarea></br></br>
                 <input type="submit" value="Submit New Post"/>
             </form>
         </c:when>

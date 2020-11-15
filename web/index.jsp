@@ -18,7 +18,7 @@
     <p>To make a post or reply you need to login or register as a user</p>
     <c:choose>
         <c:when test="${sessionScope.get('username') ==null}">
-            <form action="/login">
+            <form action="/login" METHOD="get">
                 <input type="submit" value="Login"/>
             </form>
         </c:when>

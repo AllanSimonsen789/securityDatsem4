@@ -34,7 +34,7 @@ public class UserMapper {
     }
 
     //Login user
-    public User Login(String username, String password) throws AuthenticationException {
+    public User Login(String email, String password) throws AuthenticationException {
         User returnUser = new User();
         User sqlBuildUser = new User();
         PreparedStatement pStmt = null;
@@ -48,10 +48,10 @@ public class UserMapper {
             String sql;
             sql = "SELECT id, userName, password, email " +
                     "FROM userstable " +
-                    "WHERE userName LIKE? " +
+                    "WHERE email LIKE? " +
                     "LIMIT 1";
             pStmt = conn.prepareStatement(sql);
-            pStmt.setString(1, username);
+            pStmt.setString(1, email);
             rs = pStmt.executeQuery();
 
             //Extract data from resultset

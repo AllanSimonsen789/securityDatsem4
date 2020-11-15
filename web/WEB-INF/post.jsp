@@ -36,7 +36,7 @@
     <c:choose>
         <c:when test="${sessionScope.get('username') !=null}">
             <form action="/post?post=<c:out value="${post.getPostID()}"/>" method="post">
-                <textarea name="content" rows="4" cols="50" placeholder="Make a reply here"></textarea></br>
+                <textarea name="content" style="resize: none;" rows="4" cols="50" placeholder="Make a reply here" required></textarea></br>
                 <input type = "hidden" name = "postid" value = "<c:out value="${post.getPostID()}"/>"></br>
                 <input type="submit" value="Submit Reply"/>
             </form>

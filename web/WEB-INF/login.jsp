@@ -20,7 +20,7 @@
     </form>
     <form action="/login" method="post">
         <input type="hidden" name="web_token" value="<c:out value="${web_csrf_token}" />">
-        Username: <input type="text" name="loginname" width="30" value = "<c:out value="${loginname}"/>" required/></br></br>
+        Email: <input type="text" name="email" width="30" value = "<c:out value="${email}"/>" required/></br></br>
         password: <input type="password" name="password" width="10" required/></br>
         <div style="margin-top: 20px" class="g-recaptcha"
              data-sitekey="6LceeOEZAAAAAD_L11JeMvfL--daZlljXe64RVYY"></div></br>
