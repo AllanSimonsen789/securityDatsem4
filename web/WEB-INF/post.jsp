@@ -23,7 +23,7 @@
             Reply Content: </br>
                 <c:out value="${reply.getContens()}"/></br></br>
     </c:forEach>
-    <p style="color:red"><c:out value="${confirmation}" /></p>
+    <p style="color:blue"><c:out value="${confirmation}" /></p>
 
     <h2>Make a reply</h2></br>
     <c:choose>

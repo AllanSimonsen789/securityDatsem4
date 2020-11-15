@@ -173,13 +173,14 @@ public class UserController extends HttpServlet {
 
     protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
         request.setAttribute("web_csrf_token", SecureRandomString.genSecureRandomString());
+        HttpSession session = request.getSession();
 
         switch (request.getRequestURI()){
             case "/login":
                 request.getRequestDispatcher("/WEB-INF/login.jsp").forward(request, response);
                 break;
             case "/logout":
-                HttpSession session=request.getSession(false);
+                session=request.getSession(false);
                 session.invalidate();
                 request.getRequestDispatcher("/index.jsp").forward(request, response);
                 break;
@@ -187,7 +188,12 @@ public class UserController extends HttpServlet {
                 request.getRequestDispatcher("/WEB-INF/register.jsp").forward(request, response);
                 break;
             case "/edit":
-                request.getRequestDispatcher("/WEB-INF/edit.jsp").forward(request, response);
+                if(session.getAttribute("username") !=null){
+                    request.getRequestDispatcher("/WEB-INF/edit.jsp").forward(request, response);
+                } else {
+                    response.setStatus(403);
+                    request.getRequestDispatcher("/error.jsp").forward(request, response);
+                }
                 break;
         }
     }
