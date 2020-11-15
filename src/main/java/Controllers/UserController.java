@@ -76,6 +76,10 @@ public class UserController extends HttpServlet {
                     //We trim to ensure that we won't have 2 usernames in the DB like; "Tobias", " Tobias".
                     String email = request.getParameter("email");
                     String password = request.getParameter("password");
+                    String passwordR = request.getParameter("password2");
+                    if(password == null || passwordR == null || !password.equals(passwordR)){
+                        throw new RegistrationException("The passwords do not match");
+                    }
                     String gRecaptchaResponse = request
                             .getParameter("g-recaptcha-response");
                     //Check re-capcha & Password strength & Email
