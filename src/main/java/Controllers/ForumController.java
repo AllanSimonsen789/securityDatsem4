@@ -41,7 +41,8 @@ public class ForumController extends HttpServlet {
             session.setAttribute("username", sessionUser);
 
             //ForceReload the page
-            doGet(request, response);
+            response.sendRedirect(request.getRequestURL().toString());
+
         } catch (ForumException e) {
             request.setAttribute("errorMessage", "Something went wrong");
             request.getRequestDispatcher("/WEB-INF/forum.jsp").forward(request, response);
