@@ -17,6 +17,8 @@
 
 #Database properties
 db.properties
+crypto.properties
+cloudinary.properties
 
 # Generated files
 .idea/**/contentModel.xml
