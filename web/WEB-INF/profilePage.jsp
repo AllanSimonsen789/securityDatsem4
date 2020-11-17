@@ -16,6 +16,14 @@
 </head>
 <body>
     <h1>Welcome <c:out value="${user.getUserName()}"/>!</h1>
+    <c:choose>
+        <c:when test="${imageFile != null}">
+            <img alt="profilepic" src="${imageFile}"/></br>
+        </c:when>
+        <c:otherwise>
+            <img alt="profilepic" src="https://res.cloudinary.com/dmk5yii3m/image/upload/v1578904570/defaut_vignette_carre_xavv98.jpg"/></br>
+        </c:otherwise>
+    </c:choose>
     <p>User ID: <c:out value="${user.getUserID()}"/></p>
     <p>Email: <c:out value="${user.getEmail()}"/></p>
     <% if (request.getAttribute("created") != null) { %>
@@ -32,13 +40,10 @@
         <input type="submit" value="Back to frontpage"/>
     </form>
 
-    <p>Temporary placement</p>
+    <p>Upload Profile Pic</p>
     <form action="/profile" method="post" enctype="multipart/form-data">
         <input type="file" name="file" size="50"/> <br/>
         <input type="submit" value="Upload File"/>
     </form>
-    <c:if test="${imageFile != null}">
-        <img alt="profilepic" src="/${imageFile}"/></br>
-    </c:if>
 </body>
 </html>

@@ -15,6 +15,7 @@ import java.util.ArrayList;
 import java.time.LocalDateTime;
 import java.util.Base64;
 import java.util.Properties;
+import Exception.ImageException;
 
 /**
  * Created by IntelliJ IDEA.
@@ -252,6 +253,37 @@ public class UserMapper {
             }
         }
         return returnUser;
+    }
+
+    public void setProfilePic(long userID, String imageURL) throws ImageException {
+        PreparedStatement pStmt = null;
+        Connection conn = null;
+        ResultSet rs = null;
+        try {
+            //Create connection
+            conn = DBC.getConnection();
+            //Prepared statement
+            String sql;
+            sql = "UPDATE userstable SET imageURL = ? WHERE ID = ?;";
+            pStmt = conn.prepareStatement(sql);
+            pStmt.setString(1, imageURL);
+            pStmt.setLong(2, userID);
+            boolean succes = pStmt.execute();
+
+            if(!succes){
+                throw new ImageException();
+            }
+        } catch (SQLException e) {
+            e.printStackTrace();
+        } finally {
+            //finally block used to close resources
+            try {
+                pStmt.close();
+                conn.close();
+            } catch (SQLException | NullPointerException e) {
+                e.printStackTrace();
+            }
+        }
     }
 
  /*   public static void main(String[] args) throws Exception {

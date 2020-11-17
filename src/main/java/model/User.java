@@ -14,6 +14,7 @@ public class User {
     private String email;
     private String role;
     private LocalDateTime creationDate;
+    private String imageURL;
 
     public User() { }// Temporary - delete later.
 
@@ -29,6 +30,15 @@ public class User {
         this.userName = userName;
         this.password = BCrypt.hashpw(password, BCrypt.gensalt(12));
         this.email = email;
+        this.role = "user";
+        this.creationDate = LocalDateTime.now(ZoneId.of("Europe/Copenhagen"));
+    }
+
+    public User(String userName, String password, String email, String imageURL) {
+        this.userName = userName;
+        this.password = BCrypt.hashpw(password, BCrypt.gensalt(12));
+        this.email = email;
+        this.imageURL = imageURL;
         this.role = "user";
         this.creationDate = LocalDateTime.now(ZoneId.of("Europe/Copenhagen"));
     }
@@ -58,6 +68,10 @@ public class User {
     public void setUserName(String userName) {
         this.userName = userName;
     }
+
+    public String getImageURL() {return imageURL;    }
+
+    public void setImageURL(String imageURL) {this.imageURL = imageURL;}
 
     //Might not be needed.
     public void setPassword(String password) {

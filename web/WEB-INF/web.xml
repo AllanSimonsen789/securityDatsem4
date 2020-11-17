@@ -63,13 +63,13 @@
     </servlet>
 
     <servlet-mapping>
-        <servlet-name>profileController</servlet-name>
+        <servlet-name>ProfileController</servlet-name>
         <url-pattern>/profile</url-pattern>
     </servlet-mapping>
 
     <servlet>
-        <servlet-name>profileController</servlet-name>
-        <servlet-class>Controllers.profileController</servlet-class>
+        <servlet-name>ProfileController</servlet-name>
+        <servlet-class>Controllers.ProfileController</servlet-class>
     </servlet>
 
 <!--   ERROR HANDLING -->

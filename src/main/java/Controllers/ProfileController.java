@@ -1,5 +1,7 @@
 package Controllers;
 
+import Database.ImageMapper;
+import Database.UserMapper;
 import ExtraClasses.SecureRandomString;
 import model.User;
 
@@ -8,27 +10,33 @@ import javax.servlet.annotation.MultipartConfig;
 import javax.servlet.annotation.WebServlet;
 import javax.servlet.http.*;
 import java.io.IOException;
+import java.util.List;
+import Exception.ImageException;
 
-@WebServlet(name = "profileController")
+@WebServlet(name = "ProfileController")
 @MultipartConfig(fileSizeThreshold = 1024 * 1024 * 1, // 1 MB
         maxFileSize = 1024 * 1024 * 10, // 10 MB
         maxRequestSize = 1024 * 1024 * 100 // 100 MB
 )
-public class profileController extends HttpServlet {
-    private String path = "C:\\deleteThisFromSecurity\\";
+public class ProfileController extends HttpServlet {
+    private final ImageMapper im = new ImageMapper();
 
     protected void doPost(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
-        Part filePart = request.getPart("file");
-        String fileName = "tmpRandomGeneratedFileNameNeeded.PNG"; //filePart.getSubmittedFileName();
 
-        for (Part part : request.getParts()) {
-            part.write(path + fileName);
+        String returnString = "";
+        try {
+            HttpSession session = request.getSession();
+            User sessionUser = (User) session.getAttribute("username");
+            UserMapper um = UserMapper.getInstance();
+            returnString = im.uploadProfilePic((List<Part>)request.getParts());
+            um.setProfilePic(sessionUser.getUserID(),returnString);
+        } catch (ImageException e) {
+            e.printStackTrace();
         }
-        //request.getRequestDispatcher("upload.jsp").forward(request, response);
-
         HttpSession session = request.getSession();
 //        request.setAttribute("imageFile", path + fileName);
-        request.setAttribute("imageFile", "file:///C:/deleteThisFromSecurity/"+fileName);
+        System.out.println(returnString);
+        request.setAttribute("imageFile", returnString);
         request.getRequestDispatcher("/WEB-INF/profilePage.jsp").forward(request, response);
     }
 
