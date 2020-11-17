@@ -27,18 +27,20 @@ public class ProfileController extends HttpServlet {
         System.out.println("doPost in profile controller.");
         String returnString = "";
         HttpSession session = request.getSession();
-        try {
-            User sessionUser = (User) session.getAttribute("username");
-            UserMapper um = UserMapper.getInstance();
-      //      returnString = im.uploadProfilePic((List<Part>) request.getParts());
-            um.setProfilePic(sessionUser.getUserID(), returnString);
-            //set the session users image url to the updated url.
-        } catch (ImageException e) {
-            e.printStackTrace();
+        User sessionUser = (User) session.getAttribute("username");
+        if(sessionUser != null){
+            try {
+                UserMapper um = UserMapper.getInstance();
+                //      returnString = im.uploadProfilePic((List<Part>) request.getParts());
+                um.setProfilePic(sessionUser.getUserID(), returnString);
+                sessionUser.setImageURL(returnString);
+            } catch (ImageException e) {
+                e.printStackTrace();
+            }
         }
 //        request.setAttribute("imageFile", path + fileName);
         System.out.println(returnString);
-        request.setAttribute("imageFile", returnString);
+        request.setAttribute("user", sessionUser);
         request.getRequestDispatcher("/WEB-INF/profilePage.jsp").forward(request, response);
     }
 
