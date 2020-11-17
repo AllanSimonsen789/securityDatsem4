@@ -55,7 +55,7 @@ public class RegistrationController extends HttpServlet {
                 request.getRequestDispatcher("/WEB-INF/profilePage.jsp").forward(request, response);
             }
         } catch (MySQLDuplicateEntryException e) {
-            request.setAttribute("errorMessage", "This username allready exists");
+            request.setAttribute("errorMessage", e.getMessage());
             request.getRequestDispatcher("/WEB-INF/register.jsp").forward(request, response);
         } catch (RegistrationException e) {
             request.setAttribute("errorMessage", e.getMessage());

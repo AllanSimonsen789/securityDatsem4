@@ -2,13 +2,19 @@ package Database;
 
 import Exception.AuthenticationException;
 import Exception.MySQLDuplicateEntryException;
+import ExtraClasses.CryptoMngr;
 import model.User;
 
 
+import javax.crypto.SecretKey;
+import javax.crypto.spec.SecretKeySpec;
 import java.io.IOException;
+import java.io.InputStream;
 import java.sql.*;
 import java.util.ArrayList;
 import java.time.LocalDateTime;
+import java.util.Base64;
+import java.util.Properties;
 
 /**
  * Created by IntelliJ IDEA.
@@ -21,6 +27,9 @@ public class UserMapper {
 
     private DBConnection DBC;
     private static UserMapper instance;
+    private final SecretKey KEY;
+    private final SecretKey IV;
+
 
     public static UserMapper getInstance() throws IOException {
         if (instance == null) {
@@ -31,6 +40,13 @@ public class UserMapper {
 
     private UserMapper() throws IOException {
         DBC = DBConnection.getInstance();
+        InputStream prob = null;
+        prob = DBConnection.class.getResourceAsStream("/crypto.properties");
+        Properties pros = new Properties();
+        pros.load(prob);
+        //assign parameters
+        KEY =  new SecretKeySpec(pros.getProperty("key").getBytes(), CryptoMngr.ALGORITHM);pros.getProperty("key");
+        IV =  new SecretKeySpec(pros.getProperty("IV").getBytes(), CryptoMngr.ALGORITHM); pros.getProperty("V2");
     }
 
     //Login user
@@ -43,15 +59,15 @@ public class UserMapper {
         try {
             //Create connection
             conn = DBC.getConnection();
-
+            String encryptedEmail = Base64.getEncoder().encodeToString(CryptoMngr.encrypt(KEY.getEncoded(), IV.getEncoded(), email.getBytes()));
             //Prepared statement
             String sql;
             sql = "SELECT * " +
                     "FROM userstable " +
-                    "WHERE email LIKE? " +
+                    "WHERE email LIKE ? " +
                     "LIMIT 1";
             pStmt = conn.prepareStatement(sql);
-            pStmt.setString(1, email);
+            pStmt.setString(1, encryptedEmail);
             rs = pStmt.executeQuery();
 
             //Extract data from resultset
@@ -60,7 +76,7 @@ public class UserMapper {
                 long id = rs.getLong("id");
                 String sqlUserN = rs.getString("userName");
                 String sqlPass = rs.getString("password");
-                String sqlEmail = rs.getString("email");
+                String sqlEmail = new String(CryptoMngr.decrypt(KEY.getEncoded(), IV.getEncoded(), Base64.getDecoder().decode(rs.getString("email").getBytes())));
                 String sqlRole = rs.getString("role");
                 LocalDateTime creationtime = LocalDateTime.of(1889,4,20,12,00);
                 try {
@@ -87,6 +103,10 @@ public class UserMapper {
                 throw new AuthenticationException("Invalid username or password");
             }
         } catch (SQLException e) {
+            e.printStackTrace();
+        } catch (AuthenticationException e){
+            throw e;
+        } catch (Exception e) {
             e.printStackTrace();
         } finally {
             //finally block used to close resources
@@ -119,6 +139,7 @@ public class UserMapper {
             pStmt = conn.prepareStatement(sql, Statement.RETURN_GENERATED_KEYS);
             pStmt.setString(1, user.getUserName());
             pStmt.setString(2, user.getPassword());
+            user.setEmail(Base64.getEncoder().encodeToString(CryptoMngr.encrypt(KEY.getEncoded(), IV.getEncoded(), user.getEmail().getBytes())));
             pStmt.setString(3, user.getEmail());
             //Hardcode that only users can be created through the system.
             pStmt.setString(4, user.getRole());
@@ -129,13 +150,15 @@ public class UserMapper {
             rs = pStmt.getGeneratedKeys();
             if (rs != null && rs.next()) {
                 returnUser.setUserID(rs.getInt(1));
-                returnUser.setEmail(user.getEmail());
+                returnUser.setEmail(email);
                 returnUser.setUserName(user.getUserName());
                 returnUser.setRole(user.getRole());
                 returnUser.setCreationDate(user.getCreationDate());
             }
         } catch (SQLException ex) {
-            throw new MySQLDuplicateEntryException("SQL server error, Duplicate entry");
+            throw new MySQLDuplicateEntryException("Username or Email already in use");
+        } catch (Exception e) {
+            e.printStackTrace();
         } finally {
             //finally block used to close resources
             try {
@@ -153,11 +176,12 @@ public class UserMapper {
     }
 
     //Update user
-    public User Edit(long userID, String newUsername, String newPassword, String newEmail) throws MySQLDuplicateEntryException {
+    public User Edit(long userID, String newUsername, String newPassword, String newEmail) throws Exception {
         User returnUser = new User();
         User updateUser = new User();
         ArrayList<String> newData = new ArrayList<>();
         StringBuilder sql = new StringBuilder();
+        String encryptedEmail = Base64.getEncoder().encodeToString(CryptoMngr.encrypt(KEY.getEncoded(), IV.getEncoded(), newEmail.getBytes()));
         int paramIndex = 1;
 
         //Build SQL string dynamically
@@ -185,7 +209,7 @@ public class UserMapper {
             paramIndex++;
         }
         if (newEmail != ""){
-            updateUser.setEmail(newEmail);
+            updateUser.setEmail(encryptedEmail);
             returnUser.setEmail(newEmail);
             newData.add(updateUser.getEmail());
             sql.append("email=? ");
@@ -230,11 +254,13 @@ public class UserMapper {
         return returnUser;
     }
 
-    public static void main(String[] args) throws IOException, MySQLDuplicateEntryException {
+ /*   public static void main(String[] args) throws Exception {
         UserMapper um = UserMapper.getInstance();
-//        User u = um.Register("tmp", "abc", "mail");
+        um.Edit(12,"", "", "Jody@hotmail.com");
+        //User user = um.Login("allan@sengekompagniet.dk1", "abc");
+        //System.out.println(user.getEmail() + " " + user.getUserName() + " " + user.getUserID());
 //        User u = um.Edit(13, "asd", "", "");
 //        System.out.println(u.getUserID());
-    }
+    }*/
 
 }

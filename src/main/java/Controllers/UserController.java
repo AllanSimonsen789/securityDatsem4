@@ -186,6 +186,10 @@ public class UserController extends HttpServlet {
         } catch (RegistrationException e) {
             request.setAttribute("errorMessage", e.getMessage());
             request.getRequestDispatcher("/WEB-INF/edit.jsp").forward(request, response);
+        } catch (Exception e) {
+            e.printStackTrace();
+            request.setAttribute("errorMessage", "Something went wrong.");
+            request.getRequestDispatcher("/WEB-INF/edit.jsp").forward(request, response);
         }
     }
 

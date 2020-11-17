@@ -20,6 +20,7 @@ public class profileController extends HttpServlet {
     protected void doPost(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
         Part filePart = request.getPart("file");
         String fileName = "tmpRandomGeneratedFileNameNeeded.PNG"; //filePart.getSubmittedFileName();
+
         for (Part part : request.getParts()) {
             part.write(path + fileName);
         }

@@ -38,7 +38,7 @@
         <input type="submit" value="Upload File"/>
     </form>
     <c:if test="${imageFile != null}">
-        <img src="${imageFile}"/></br>
+        <img alt="profilepic" src="/${imageFile}"/></br>
     </c:if>
 </body>
 </html>
