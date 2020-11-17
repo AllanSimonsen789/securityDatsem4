@@ -46,9 +46,7 @@ public class Post {
         return userID;
     }
 
-    public String getUsername(){
-        return username;
-    }
+    public String getUsername() { return username; }
 
     public String getPostTitle() {
         return postTitle;

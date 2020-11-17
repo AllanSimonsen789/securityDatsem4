@@ -20,29 +20,46 @@
 <%--%>--%>
 <%--{"message":"An error occurred, please retry"}--%>
 <html>
-<head>
-    <meta http-equiv="Content-Type" content="text/html; charset=US-ASCII">
-    <title>Error Page</title>
-</head>
-<body>
-<img alt="Error" src="https://starecat.com/content/wp-content/uploads/windows-xp-task-failed-successfully-warning-information.jpg" style="width: 200px; height: 130px;"></br>
-<% if(response.getStatus() >= 500){ %>
-Internal server error, error code is <%=response.getStatus() %><br>
-Please go to <a href="/index.jsp">home page</a> And try again later ;)
+    <head>
+        <meta http-equiv="Content-Type" content="text/html; charset=US-ASCII">
+        <title>Error Page</title>
+    </head>
+    <body>
+        <img alt="Error"
+             src="https://starecat.com/content/wp-content/uploads/windows-xp-task-failed-successfully-warning-information.jpg"
+             style="width: 200px; height: 130px;"></br>
 
-<%}else if (response.getStatus() == 404){%>
-Unknown URL, error code is <%=response.getStatus() %><br>
-Please go to <a href="/index.jsp">home page</a>
+<%--        <c:choose>--%>
+<%--            <c:when test="${requestScope['javax.servlet.error.status_code'] >= 500}">--%>
+<%--                Internal server error, error code is ${requestScope.getStatus()}<br>--%>
+<%--                Please go to <a href="/index.jsp">home page</a> And try again later ;)--%>
+<%--            </c:when>--%>
+<%--            <c:when test="${requestScope['javax.servlet.error.status_code'] == 404}">--%>
+<%--                Unknown URL, error code is ${requestScope.getStatus()}<br>--%>
+<%--                Please go to <a href="/index.jsp">home page</a>--%>
+<%--            </c:when>--%>
+<%--            <c:when test="${requestScope['javax.servlet.error.status_code'] == 403}">--%>
+<%--                No access, error code is ${requestScope.getStatus()}<br>--%>
+<%--                Please go to <a href="/index.jsp">home page</a>--%>
+<%--            </c:when>--%>
+<%--            <c:when test="${requestScope['javax.servlet.error.status_code'] >= 400}">--%>
+<%--                Unknown Error: error code is ${requestScope.getStatus()}<br>--%>
+<%--                Please go to <a href="/index.jsp">home page</a>--%>
+<%--            </c:when>--%>
+<%--        </c:choose>--%>
 
-<%}else if (response.getStatus() == 403){%>
-No access, error code is <%=response.getStatus() %><br>
-Please go to <a href="/index.jsp">home page</a>
-
-<%}else if (response.getStatus() >= 400){%>
-Unknown Error: error code is <%=response.getStatus()%><br>
-Please go to <a href="/index.jsp">home page</a>
-<%}
-
-%>
-</body>
+        <% if (response.getStatus() >= 500) { %>
+        Internal server error, error code is <%=response.getStatus() %><br>
+        Please go to <a href="/index.jsp">home page</a> And try again later ;)
+        <%} else if (response.getStatus() == 404) {%>
+        Unknown URL, error code is <%=response.getStatus() %><br>
+        Please go to <a href="/index.jsp">home page</a>
+        <%} else if (response.getStatus() == 403) {%>
+        No access, error code is <%=response.getStatus() %><br>
+        Please go to <a href="/index.jsp">home page</a>
+        <%} else if (response.getStatus() >= 400) {%>
+        Unknown Error: error code is <%=response.getStatus()%><br>
+        Please go to <a href="/index.jsp">home page</a>
+        <%}%>
+    </body>
 </html>

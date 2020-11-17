@@ -9,8 +9,10 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
 import java.io.IOException;
+
 import Exception.AuthenticationException;
 import ExtraClasses.SecureRandomString;
+import ExtraClasses.SessionHelper;
 import ExtraClasses.VerifyRecaptcha;
 import model.User;
 
@@ -18,7 +20,7 @@ import model.User;
 @WebServlet(name = "LoginController")
 public class LoginController extends HttpServlet {
     protected void doPost(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
-        if(SecureRandomString.validateSecureString(request.getParameter("web_token"))) {
+        if (SecureRandomString.validateSecureString(request.getParameter("web_token"))) {
             request.setAttribute("csrf_success_error", "Tokens are equal");
             request.setAttribute("web_csrf_token", SecureRandomString.genSecureRandomString());
         } else {
@@ -29,13 +31,13 @@ public class LoginController extends HttpServlet {
         //Lav switch - login, logout, register på cmd.
         UserMapper us = UserMapper.getInstance();
 
-        try{
+        try {
             User user = us.Login(request.getParameter("loginname"), request.getParameter("password"));
             String gRecaptchaResponse = request
                     .getParameter("g-recaptcha-response");
             boolean verify = VerifyRecaptcha.verify(gRecaptchaResponse);
 
-            if(user != null && verify) {
+            if (user != null && verify) {
                 //Login sucsessfull. Username and hashed psw are correct.
 
                 // get current session
@@ -52,11 +54,11 @@ public class LoginController extends HttpServlet {
                 request.setAttribute("id", user.getUserID());
                 request.setAttribute("email", user.getEmail());
                 request.getRequestDispatcher("/WEB-INF/profilePage.jsp").forward(request, response);
-            }else{
+            } else {
                 throw new AuthenticationException("SoMeThInG WeNt WrOnG :(");
             }
 
-        }catch (AuthenticationException e){
+        } catch (AuthenticationException e) {
             request.setAttribute("errorMessage", "Invalid login and password. Try again");
             request.getRequestDispatcher("/WEB-INF/login.jsp").forward(request, response);
         }
@@ -124,10 +126,15 @@ public class LoginController extends HttpServlet {
         request.setAttribute("web_csrf_token", SecureRandomString.genSecureRandomString());
         request.getRequestDispatcher("/WEB-INF/login.jsp").forward(request, response);
 
-        if(request.getRequestURL().equals("/login")) {
+        //Rotate session ID, with the same user.
+//        HttpSession session = request.getSession();
+//        User sessionUser = (User) session.getAttribute("username");
+//        SessionHelper.rotateSessionID(request.getSession(), request, sessionUser);
+
+        if (request.getRequestURL().equals("/login")) {
             response.sendRedirect("index.jsp");
-        } else if(request.getRequestURL().equals("/logout")) {
-            HttpSession session=request.getSession(false);
+        } else if (request.getRequestURL().equals("/logout")) {
+            HttpSession session = request.getSession(false);
             session.invalidate();
             response.sendRedirect("index.jsp");
         }

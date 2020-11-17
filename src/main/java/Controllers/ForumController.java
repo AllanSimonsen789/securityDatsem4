@@ -2,6 +2,7 @@ package Controllers;
 
 import Database.ForumMapper;
 import ExtraClasses.SecureRandomString;
+import ExtraClasses.SessionHelper;
 import model.Post;
 import Exception.ForumException;
 import model.User;
@@ -51,6 +52,16 @@ public class ForumController extends HttpServlet {
 
     protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
         request.setAttribute("web_csrf_token", SecureRandomString.genSecureRandomString());
+        //Rotate session ID, with the same user.
+        HttpSession session = request.getSession();
+        User sessionUser = (User) session.getAttribute("username");
+
+        if(sessionUser != null){
+            SessionHelper.rotateSessionIDWithUser(request.getSession(), request, sessionUser);
+        } else {
+            //The user hasn't logged in, and can't comment or create a new forum post.
+            SessionHelper.rotateSessionIDWithoutUser(session, request);
+        }
         ForumMapper fm = ForumMapper.getInstance();
         ArrayList<Post> postlist = fm.fetchPosts();
         request.setAttribute("arraylen", postlist.size());

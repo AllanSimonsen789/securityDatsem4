@@ -6,6 +6,7 @@ import Exception.MySQLDuplicateEntryException;
 import Exception.RegistrationException;
 import ExtraClasses.RegistrationHelper;
 import ExtraClasses.SecureRandomString;
+import ExtraClasses.SessionHelper;
 import ExtraClasses.VerifyRecaptcha;
 import model.User;
 
@@ -27,7 +28,7 @@ import java.io.IOException;
 @WebServlet(name = "UserController")
 public class UserController extends HttpServlet {
     protected void doPost(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
-        if(SecureRandomString.validateSecureString(request.getParameter("web_token"))) {
+        if (SecureRandomString.validateSecureString(request.getParameter("web_token"))) {
             request.setAttribute("csrf_success_error", "Tokens are equal");
             request.setAttribute("web_csrf_token", SecureRandomString.genSecureRandomString());
         } else {
@@ -35,38 +36,29 @@ public class UserController extends HttpServlet {
             request.setAttribute("web_csrf_token", SecureRandomString.genSecureRandomString());
         }
 
-        switch (request.getRequestURI()){
+        switch (request.getRequestURI()) {
             case "/login":
                 //Lav switch - login, logout, register på cmd.
                 UserMapper us = UserMapper.getInstance();
-                try{
+                try {
                     String inputEmail = request.getParameter("email");
                     request.setAttribute("email", inputEmail);
-                    if (inputEmail.length() == 0 && !RegistrationHelper.checkEmail(inputEmail)){
+                    if (inputEmail.length() == 0 && !RegistrationHelper.checkEmail(inputEmail)) {
                         throw new RegistrationException("Email is not valid");
                     }
-                    if (!VerifyRecaptcha.verify(request.getParameter("g-recaptcha-response"))){
+                    if (!VerifyRecaptcha.verify(request.getParameter("g-recaptcha-response"))) {
                         throw new RegistrationException("Recaptha not done");
                     }
                     User user = us.Login(inputEmail, request.getParameter("password"));
-                    if(user != null) {
+                    if (user != null) {
                         //Login sucsessfull. Username and hashed psw are correct.
-
-                        // get current session
-                        HttpSession session = request.getSession();
-                        //The code below makes sure that we are given a new session id whenever we refresh - after our initial login.
-                        //This needs to happen. Because it will ensure that no-one can steal a session id, and then pretend to be the logged in person.
-                        // remove current session
-                        session.invalidate();
-                        session = request.getSession(true);
-                        // generate a new session
-                        session.setAttribute("username", user);
+                        SessionHelper.rotateSessionIDWithUser(request.getSession(), request, user);
                         response.sendRedirect("/profile");
                         //request.getRequestDispatcher("/WEB-INF/profilePage.jsp").forward(request, response);
-                    }else{
+                    } else {
                         throw new AuthenticationException("SoMeThInG WeNt WrOnG :(");
                     }
-                }catch (AuthenticationException e){
+                } catch (AuthenticationException e) {
                     request.setAttribute("errorMessage", "Invalid login and password. Try again");
                     request.getRequestDispatcher("/WEB-INF/login.jsp").forward(request, response);
                 } catch (RegistrationException e) {
@@ -87,27 +79,24 @@ public class UserController extends HttpServlet {
                     String gRecaptchaResponse = request
                             .getParameter("g-recaptcha-response");
                     //Check re-capcha & Password strength & Email
-                    if(password == null || passwordR == null || !password.equals(passwordR)){
+                    if (password == null || passwordR == null || !password.equals(passwordR)) {
                         throw new RegistrationException("The passwords do not match");
                     }
-                    if (!VerifyRecaptcha.verify(gRecaptchaResponse)){
+                    if (!VerifyRecaptcha.verify(gRecaptchaResponse)) {
                         throw new RegistrationException("Recpathca not done correctly");
                     }
-                    if(RegistrationHelper.checkPassword(password)
+                    if (RegistrationHelper.checkPassword(password)
                             && RegistrationHelper.checkEmail(email)) {
                         //Create user in DB
                         UserMapper um = UserMapper.getInstance();
                         User registeredUser = um.Register(userName, password, email);
                         //auto login for the user, give session id.
-                        HttpSession session = request.getSession();
-                        session.invalidate();
-                        session = request.getSession(true);
-                        session.setAttribute("username", registeredUser);
+                        SessionHelper.rotateSessionIDWithUser(request.getSession(), request, registeredUser);
                         //Return attributes
                         request.setAttribute("user", registeredUser);
                         request.setAttribute("created", "The user was created successfully!");
                         request.getRequestDispatcher("/WEB-INF/profilePage.jsp").forward(request, response);
-                    }else{
+                    } else {
                         throw new RegistrationException("Something went wrong");
                     }
                 } catch (MySQLDuplicateEntryException e) {
@@ -140,22 +129,22 @@ public class UserController extends HttpServlet {
             String gRecaptchaResponse = request
                     .getParameter("g-recaptcha-response");
             //Check for fields that have been filled out correctly
-            if(newUsername.length() == 0 && newPassword.length() == 0 && newEmail.length() == 0){
+            if (newUsername.length() == 0 && newPassword.length() == 0 && newEmail.length() == 0) {
                 throw new RegistrationException("Nothing changed");
             }
             boolean emailCheck = true;
             boolean passwordCheck = true;
-            if (newEmail != ""){
+            if (newEmail != "") {
                 emailCheck = RegistrationHelper.checkEmail(newEmail);
             }
-            if(newPassword == null || newPasswordR == null || !newPassword.equals(newPasswordR)){
+            if (newPassword == null || newPasswordR == null || !newPassword.equals(newPasswordR)) {
                 throw new RegistrationException("The passwords do not match");
             }
             //Check re-capcha & Password strength & Email
-            if (!VerifyRecaptcha.verify(gRecaptchaResponse)){
-                throw new RegistrationException("Captacha nOT DonE")   ;
+            if (!VerifyRecaptcha.verify(gRecaptchaResponse)) {
+                throw new RegistrationException("Captacha nOT DonE");
             }
-            if( emailCheck && passwordCheck) {
+            if (emailCheck && passwordCheck) {
                 //Get logged-in/createdUser from session.
                 UserMapper um = UserMapper.getInstance();
                 HttpSession session = request.getSession();
@@ -164,16 +153,14 @@ public class UserController extends HttpServlet {
                 User editedUser = um.Edit(sessionUser.getUserID(), newUsername, newPassword, newEmail);
                 //We need to add the old ID to the new session user.
                 editedUser.setUserID(sessionUser.getUserID());
-                if(editedUser.getEmail() == null){
+                if (editedUser.getEmail() == null) {
                     editedUser.setEmail(sessionUser.getEmail());
                 }
-                if(editedUser.getUserName() == null){
+                if (editedUser.getUserName() == null) {
                     editedUser.setUserName(sessionUser.getUserName());
                 }
                 //Reset user in session, replace with the edited user
-                session.invalidate();
-                session = request.getSession(true);
-                session.setAttribute("username", editedUser);
+                SessionHelper.rotateSessionIDWithUser(session, request, editedUser);
 
                 request.setAttribute("username", editedUser.getUserName());
                 request.setAttribute("id", editedUser.getUserID());
@@ -195,22 +182,27 @@ public class UserController extends HttpServlet {
 
     protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
         request.setAttribute("web_csrf_token", SecureRandomString.genSecureRandomString());
+        //Update the session id, but keep the same user.
         HttpSession session = request.getSession();
+        User sessionUser = (User) session.getAttribute("username");
 
-        switch (request.getRequestURI()){
+        switch (request.getRequestURI()) {
             case "/login":
+                SessionHelper.rotateSessionIDWithoutUser(session, request);
                 request.getRequestDispatcher("/WEB-INF/login.jsp").forward(request, response);
                 break;
             case "/logout":
-                session=request.getSession(false);
+                session = request.getSession(false);
                 session.invalidate();
                 request.getRequestDispatcher("/index.jsp").forward(request, response);
                 break;
             case "/register":
+                SessionHelper.rotateSessionIDWithoutUser(session, request);
                 request.getRequestDispatcher("/WEB-INF/register.jsp").forward(request, response);
                 break;
             case "/edit":
-                if(session.getAttribute("username") !=null){
+                if (sessionUser != null) {
+                    SessionHelper.rotateSessionIDWithUser(session, request, sessionUser);
                     request.getRequestDispatcher("/WEB-INF/edit.jsp").forward(request, response);
                 } else {
                     response.setStatus(403);

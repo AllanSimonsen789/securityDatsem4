@@ -13,10 +13,10 @@ import java.util.Date;
 
 /**
  * Created by IntelliJ IDEA.
- *   User: ALlan
- *   Date: 24/09/2020
- *   Time: 18:32
- *   To change this template use File | Settings | File Templates.
+ * User: ALlan
+ * Date: 24/09/2020
+ * Time: 18:32
+ * To change this template use File | Settings | File Templates.
  */
 public class ReplyMapper {
 
@@ -24,7 +24,7 @@ public class ReplyMapper {
     private static ReplyMapper instance;
 
     public static ReplyMapper getInstance() throws IOException {
-        if(instance == null){
+        if (instance == null) {
             instance = new ReplyMapper();
         }
         return instance;
@@ -51,16 +51,16 @@ public class ReplyMapper {
             rs = pStmt.executeQuery();
 
             //Extract data from resultset
-            while (rs.next()){
+            while (rs.next()) {
                 //Retrieve by column name
                 long replyid = rs.getLong("id");
                 long userid = rs.getLong("userid");
                 String username = rs.getString("username");
                 String content = rs.getString("content");
-                LocalDateTime posttime = LocalDateTime.of(1889,4,20,12,00);
+                LocalDateTime posttime = LocalDateTime.of(1889, 4, 20, 12, 00);
                 try {
                     posttime = rs.getTimestamp("replytime").toLocalDateTime();
-                } catch ( Exception e) {
+                } catch (Exception e) {
                     e.printStackTrace();
                 }
                 returnlist.add(new Reply(replyid, userid, username, new Long(id), content, posttime));
@@ -102,17 +102,19 @@ public class ReplyMapper {
 
             //Ensure that the user was created and what ID they got from auto_increment in DB.
             rs = pStmt.getGeneratedKeys();
-            if(rs != null && rs.next()){
+            if (rs != null && rs.next()) {
                 returnReply = reply;
                 returnReply.setReplyID(rs.getInt(1));
             }
         } catch (SQLException ex) {
             ex.printStackTrace();
             throw new ForumException("Something went wrong");
-        }finally {
+        } finally {
             //finally block used to close resources
             try {
-                if(rs != null){rs.close();}
+                if (rs != null) {
+                    rs.close();
+                }
                 pStmt.close();
                 conn.close();
             } catch (SQLException e) {

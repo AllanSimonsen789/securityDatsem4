@@ -9,35 +9,46 @@
 <%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
 <%@ taglib prefix="fn" uri="http://java.sun.com/jsp/jstl/functions" %>
 <html>
-  <head>
-      <title>Debateit</title>
-  </head>
-  <body>
-    <h1>Debateit</h1>
-    <h3>Welcome to Debateit.</h3>
-    <p>To make a post or reply you need to login or register as a user</p>
-    <c:choose>
-        <c:when test="${sessionScope.get('username') ==null}">
-            <form action="/login" METHOD="get">
-                <input type="submit" value="Login"/>
+    <head>
+        <title>Debateit</title>
+    </head>
+    <body>
+        <h1>Debateit</h1>
+
+        <h3>Welcome to Debateit.</h3>
+
+        <p>To make a post or reply you need to login or register as a user</p>
+
+        <c:choose>
+            <c:when test="${sessionScope.get('username') ==null}">
+                <form action="/login" METHOD="get">
+                    <input type="submit" value="Login"/>
+                </form>
+            </c:when>
+            <c:otherwise>
+                <form action="/logout">
+                    <input type="submit" value="Logout"/>
+                </form>
+                <form action="/profile">
+                    <input type="submit" value="Go To Profile Page"/>
+                </form>
+                <%--   If admin show btn--%>
+                <c:if test="${sessionScope.username.role.equals('admin')}">
+                    <form action="/secretAdminPage">
+                        <input type="submit" value="Go To Admin Page"/>
+                    </form>
+                </c:if>
+            </c:otherwise>
+        </c:choose>
+
+        <c:if test="${sessionScope.get('username') ==null}">
+            <form action="/register">
+                <input type="submit" value="Register As New User"/>
             </form>
-        </c:when>
-        <c:otherwise>
-            <form action="/logout">
-                <input type="submit" value="Logout"/>
-            </form>
-            <form action="/profile">
-                <input type="submit" value="Go To Profile Page"/>
-            </form>
-        </c:otherwise>
-    </c:choose>
-    <c:if test="${sessionScope.get('username') ==null}">
-        <form action="/register">
-            <input type="submit" value="Register As New User"/>
+        </c:if>
+
+        <form action="/forum">
+            <input type="submit" value="Go To Forum"/>
         </form>
-    </c:if>
-    <form action="/forum">
-        <input type="submit" value="Go To Forum"/>
-    </form>
-  </body>
+    </body>
 </html>

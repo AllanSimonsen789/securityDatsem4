@@ -15,6 +15,7 @@ import java.util.ArrayList;
 import java.time.LocalDateTime;
 import java.util.Base64;
 import java.util.Properties;
+
 import Exception.ImageException;
 
 /**
@@ -46,8 +47,10 @@ public class UserMapper {
         Properties pros = new Properties();
         pros.load(prob);
         //assign parameters
-        KEY =  new SecretKeySpec(pros.getProperty("key").getBytes(), CryptoMngr.ALGORITHM);pros.getProperty("key");
-        IV =  new SecretKeySpec(pros.getProperty("IV").getBytes(), CryptoMngr.ALGORITHM); pros.getProperty("V2");
+        KEY = new SecretKeySpec(pros.getProperty("key").getBytes(), CryptoMngr.ALGORITHM);
+        pros.getProperty("key");
+        IV = new SecretKeySpec(pros.getProperty("IV").getBytes(), CryptoMngr.ALGORITHM);
+        pros.getProperty("V2");
     }
 
     //Login user
@@ -79,10 +82,11 @@ public class UserMapper {
                 String sqlPass = rs.getString("password");
                 String sqlEmail = new String(CryptoMngr.decrypt(KEY.getEncoded(), IV.getEncoded(), Base64.getDecoder().decode(rs.getString("email").getBytes())));
                 String sqlRole = rs.getString("role");
-                LocalDateTime creationtime = LocalDateTime.of(1889,4,20,12,00);
+                String sqlUserImg = rs.getString("imageURL");
+                LocalDateTime creationtime = LocalDateTime.of(1889, 4, 20, 12, 00);
                 try {
                     creationtime = rs.getTimestamp("creationDate").toLocalDateTime();
-                } catch ( Exception e) {
+                } catch (Exception e) {
                     e.printStackTrace();
                 }
 
@@ -92,6 +96,7 @@ public class UserMapper {
                 sqlBuildUser.setUserName(sqlUserN);
                 sqlBuildUser.setRole(sqlRole);
                 sqlBuildUser.setCreationDate(creationtime);
+                sqlBuildUser.setImageURL(sqlUserImg);
 
                 //Validate Password
                 if (!sqlBuildUser.verifyPassword(password, sqlPass)) {
@@ -105,7 +110,7 @@ public class UserMapper {
             }
         } catch (SQLException e) {
             e.printStackTrace();
-        } catch (AuthenticationException e){
+        } catch (AuthenticationException e) {
             throw e;
         } catch (Exception e) {
             e.printStackTrace();
@@ -187,29 +192,29 @@ public class UserMapper {
 
         //Build SQL string dynamically
         sql.append("UPDATE userstable SET ");
-        if(newUsername != ""){
+        if (newUsername != "") {
             updateUser.setUserName(newUsername);
             returnUser.setUserName(newUsername);
             newData.add(updateUser.getUserName());
-            if(newPassword != "" || newEmail != ""){
+            if (newPassword != "" || newEmail != "") {
                 sql.append("userName=?, ");
             } else {
                 sql.append("userName=? ");
             }
             paramIndex++;
         }
-        if (newPassword != ""){
+        if (newPassword != "") {
             updateUser.setPassword(newPassword);
             returnUser.setPassword(newPassword);
             newData.add(updateUser.getPassword());
-            if(newEmail != ""){
+            if (newEmail != "") {
                 sql.append("password=?, ");
             } else {
                 sql.append("password=? ");
             }
             paramIndex++;
         }
-        if (newEmail != ""){
+        if (newEmail != "") {
             updateUser.setEmail(encryptedEmail);
             returnUser.setEmail(newEmail);
             newData.add(updateUser.getEmail());
@@ -270,7 +275,7 @@ public class UserMapper {
             pStmt.setLong(2, userID);
             boolean succes = pStmt.execute();
 
-            if(!succes){
+            if (!succes) {
                 throw new ImageException();
             }
         } catch (SQLException e) {

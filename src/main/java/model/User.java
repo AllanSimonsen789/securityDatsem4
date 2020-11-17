@@ -16,7 +16,8 @@ public class User {
     private LocalDateTime creationDate;
     private String imageURL;
 
-    public User() { }// Temporary - delete later.
+    public User() {
+    }// Temporary - delete later.
 
     //Builds user after login
     public User(long userID, String userName, String email) {
@@ -69,9 +70,9 @@ public class User {
         this.userName = userName;
     }
 
-    public String getImageURL() {return imageURL;    }
+    public String getImageURL() { return imageURL; }
 
-    public void setImageURL(String imageURL) {this.imageURL = imageURL;}
+    public void setImageURL(String imageURL) { this.imageURL = imageURL; }
 
     //Might not be needed.
     public void setPassword(String password) {

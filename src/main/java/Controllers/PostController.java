@@ -4,6 +4,7 @@ import Database.ForumMapper;
 import Database.ReplyMapper;
 import Exception.ForumException;
 import ExtraClasses.SecureRandomString;
+import ExtraClasses.SessionHelper;
 import model.Post;
 import model.Reply;
 import model.User;
@@ -50,6 +51,15 @@ public class PostController extends HttpServlet {
 
     protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
         request.setAttribute("web_csrf_token", SecureRandomString.genSecureRandomString());
+        //Rotate session ID, with the same user.
+        HttpSession session = request.getSession();
+        User sessionUser = (User) session.getAttribute("username");
+        if(sessionUser != null){
+            SessionHelper.rotateSessionIDWithUser(session, request, sessionUser);
+        } else {
+            //The user hasn't logged in, and can't comment or create a new forum post.
+            SessionHelper.rotateSessionIDWithoutUser(session, request);
+        }
         int postid = Integer.parseInt(request.getParameter("post"));
         ForumMapper fm = ForumMapper.getInstance();
         ReplyMapper rm = ReplyMapper.getInstance();
@@ -57,6 +67,5 @@ public class PostController extends HttpServlet {
         request.setAttribute("replies", rm.fetchreplies(postid));
 
         request.getRequestDispatcher("/WEB-INF/post.jsp").forward(request, response);
-
     }
 }

@@ -40,7 +40,7 @@ public class RegistrationHelper {
         //Checks to see if we were provided with an email. - OWASP provided regex. https://owasp.org/www-community/OWASP_Validation_Regex_Repository
         Pattern pattern = Pattern.compile("^[a-zA-Z0-9_+&*-]+(?:\\.[a-zA-Z0-9_+&*-]+)*@(?:[a-zA-Z0-9-]+\\.)+[a-zA-Z]{2,7}$");
         Matcher matcher = pattern.matcher(email);
-        if(matcher.matches()){
+        if (matcher.matches()) {
             return true;
         }
         throw new RegistrationException("Email is invalid.");

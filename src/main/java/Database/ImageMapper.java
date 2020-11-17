@@ -31,12 +31,12 @@ public class ImageMapper {
     private static String working_dir = null;
     private static Cloudinary cloudinary;
 
-   
+
     public ImageMapper() {
         System.out.println("Hello Not working");
-        if(OS.contains("win") || OS.contains("mac")){
+        if (OS.contains("win") || OS.contains("mac")) {
             working_dir = System.getProperty("user.dir");
-        }else if(OS.contains("nix") || OS.contains("nux") || OS.contains("aix")){
+        } else if (OS.contains("nix") || OS.contains("nux") || OS.contains("aix")) {
             working_dir = System.getProperty("catalina.base");
         } else {
             working_dir = "";
@@ -46,9 +46,9 @@ public class ImageMapper {
             pros.load(prob);
 
             cloudinary = new Cloudinary(ObjectUtils.asMap(
-                        "cloud_name", pros.getProperty("cloud_name"),
-                        "api_key", pros.getProperty("api_key"),
-                        "api_secret", pros.getProperty("api_secret")));
+                    "cloud_name", pros.getProperty("cloud_name"),
+                    "api_key", pros.getProperty("api_key"),
+                    "api_secret", pros.getProperty("api_secret")));
         } catch (IOException e) {
             e.printStackTrace();
         }

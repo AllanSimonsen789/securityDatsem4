@@ -48,7 +48,6 @@ public class Reply {
         this.replyID = replyID;
     }
 
-
     public long getReplyID() { return replyID; }
 
     public String getContens() { return contens; }

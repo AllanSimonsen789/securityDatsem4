@@ -4,6 +4,7 @@ import Database.UserMapper;
 import Exception.MySQLDuplicateEntryException;
 import Exception.RegistrationException;
 import ExtraClasses.RegistrationHelper;
+import ExtraClasses.SessionHelper;
 import ExtraClasses.VerifyRecaptcha;
 import model.User;
 
@@ -65,6 +66,10 @@ public class RegistrationController extends HttpServlet {
 
     protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
 //        request.getRequestDispatcher("/register.jsp").forward(request, response); //Den her rammer /register og ikke /register.jsp
+//Rotate session ID, with the same user.
+//        HttpSession session = request.getSession();
+//        User sessionUser = (User) session.getAttribute("username");
+//        SessionHelper.rotateSessionID(request.getSession(), request, sessionUser);
 
         if (request.getRequestURI().equals("/register")) {
             request.getRequestDispatcher("/WEB-INF/register.jsp").forward(request, response);

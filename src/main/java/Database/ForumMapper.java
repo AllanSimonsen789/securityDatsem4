@@ -12,10 +12,10 @@ import java.util.ArrayList;
 
 /**
  * Created by IntelliJ IDEA.
- *   User: ALlan
- *   Date: 24/09/2020
- *   Time: 18:32
- *   To change this template use File | Settings | File Templates.
+ * User: ALlan
+ * Date: 24/09/2020
+ * Time: 18:32
+ * To change this template use File | Settings | File Templates.
  */
 public class ForumMapper {
 
@@ -23,7 +23,7 @@ public class ForumMapper {
     private static ForumMapper instance;
 
     public static ForumMapper getInstance() throws IOException {
-        if(instance == null){
+        if (instance == null) {
             instance = new ForumMapper();
         }
         return instance;
@@ -34,7 +34,7 @@ public class ForumMapper {
     }
 
 
-    public Post fetchPost(int id){
+    public Post fetchPost(int id) {
         Post returnpost = null;
         PreparedStatement pStmt = null;
         Connection conn = null;
@@ -52,16 +52,16 @@ public class ForumMapper {
             rs = pStmt.executeQuery();
 
             //Extract data from resultset
-            if (rs.next()){
+            if (rs.next()) {
                 //Retrieve by column name
                 long userid = rs.getLong("userid");
                 String username = rs.getString("username");
                 String title = rs.getString("title");
                 String content = rs.getString("content");
-                LocalDateTime posttime = LocalDateTime.of(1889,4,20,12,00);
+                LocalDateTime posttime = LocalDateTime.of(1889, 4, 20, 12, 00);
                 try {
                     posttime = rs.getTimestamp("posttime").toLocalDateTime();
-                } catch ( Exception e) {
+                } catch (Exception e) {
                     e.printStackTrace();
                 }
                 returnpost = new Post(id, userid, username, title, content, posttime);
@@ -99,17 +99,17 @@ public class ForumMapper {
             rs = pStmt.executeQuery();
 
             //Extract data from resultset
-            while (rs.next()){
+            while (rs.next()) {
                 //Retrieve by column name
                 long id = rs.getLong("id");
                 long userid = rs.getLong("userid");
                 String username = rs.getString("username");
                 String title = rs.getString("title");
                 String content = rs.getString("content");
-                LocalDateTime posttime = LocalDateTime.of(1889,4,20,12,00);
+                LocalDateTime posttime = LocalDateTime.of(1889, 4, 20, 12, 00);
                 try {
                     posttime = rs.getTimestamp("posttime").toLocalDateTime();
-                } catch ( Exception e) {
+                } catch (Exception e) {
                     e.printStackTrace();
                 }
                 returnlist.add(new Post(id, userid, username, title, content, posttime));
@@ -151,16 +151,18 @@ public class ForumMapper {
 
             //Ensure that the user was created and what ID they got from auto_increment in DB.
             rs = pStmt.getGeneratedKeys();
-            if(rs != null && rs.next()){
+            if (rs != null && rs.next()) {
                 returnPost = post;
                 returnPost.setPostID(rs.getInt(1));
             }
         } catch (SQLException ex) {
             throw new ForumException("Something went wrong");
-        }finally {
+        } finally {
             //finally block used to close resources
             try {
-                if(rs != null){rs.close();}
+                if (rs != null) {
+                    rs.close();
+                }
                 pStmt.close();
                 conn.close();
             } catch (SQLException e) {

@@ -23,7 +23,7 @@ public class VerifyRecaptcha {
             return false;
         }
 
-        try{
+        try {
             URL obj = new URL(url);
             HttpsURLConnection con = (HttpsURLConnection) obj.openConnection();
 
@@ -59,7 +59,7 @@ public class VerifyRecaptcha {
             jsonReader.close();
 
             return jsonObject.getBoolean("success");
-        }catch(Exception e){
+        } catch (Exception e) {
             e.printStackTrace();
             return false;
         }

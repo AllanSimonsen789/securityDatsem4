@@ -19,7 +19,7 @@ public class DBConnection {
     private static DBConnection instance;
 
     public static DBConnection getInstance() throws IOException {
-        if(instance == null){
+        if (instance == null) {
             instance = new DBConnection();
         }
         return instance;
@@ -38,15 +38,15 @@ public class DBConnection {
     }
 
     //  Database credentials
-    public Connection getConnection(){
+    public Connection getConnection() {
         Connection conn = null;
         try {
             //Create connection
-            if (conn == null){
+            if (conn == null) {
                 Class.forName(driver);
                 conn = DriverManager.getConnection(url, user, passowrd);
             }
-        } catch ( SQLException | ClassNotFoundException ex) {
+        } catch (SQLException | ClassNotFoundException ex) {
             System.out.println(ex);
         }
         return conn;
