@@ -21,25 +21,22 @@ import Exception.ImageException;
         maxRequestSize = 1024 * 1024 * 100 // 100 MB
 )
 public class ProfileController extends HttpServlet {
-    //private final ImageMapper im = new ImageMapper();
+    private final ImageMapper im = new ImageMapper();
 
     protected void doPost(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
-        System.out.println("doPost in profile controller.");
         String returnString = "";
         HttpSession session = request.getSession();
         User sessionUser = (User) session.getAttribute("username");
         if(sessionUser != null){
             try {
                 UserMapper um = UserMapper.getInstance();
-                //      returnString = im.uploadProfilePic((List<Part>) request.getParts());
+                returnString = im.uploadProfilePic((List<Part>) request.getParts());
                 um.setProfilePic(sessionUser.getUserID(), returnString);
                 sessionUser.setImageURL(returnString);
             } catch (ImageException e) {
                 e.printStackTrace();
             }
         }
-//        request.setAttribute("imageFile", path + fileName);
-        System.out.println(returnString);
         request.setAttribute("user", sessionUser);
         request.getRequestDispatcher("/WEB-INF/profilePage.jsp").forward(request, response);
     }

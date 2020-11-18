@@ -140,8 +140,8 @@ public class UserMapper {
 
             //Prepared statement
             String sql;
-            sql = "INSERT INTO userstable (userName, password, email, role, creationDate) " +
-                    "VALUES (?,?,?,?,?)";
+            sql = "INSERT INTO userstable (userName, password, email, role, creationDate, imageURL) " +
+                    "VALUES (?,?,?,?,?,?)";
             pStmt = conn.prepareStatement(sql, Statement.RETURN_GENERATED_KEYS);
             pStmt.setString(1, user.getUserName());
             pStmt.setString(2, user.getPassword());
@@ -150,6 +150,7 @@ public class UserMapper {
             //Hardcode that only users can be created through the system.
             pStmt.setString(4, user.getRole());
             pStmt.setTimestamp(5, Timestamp.valueOf(user.getCreationDate()));
+            pStmt.setString(6, user.getImageURL());
             pStmt.executeUpdate();
 
             //Ensure that the user was created and what ID they got from auto_increment in DB.
@@ -160,6 +161,7 @@ public class UserMapper {
                 returnUser.setUserName(user.getUserName());
                 returnUser.setRole(user.getRole());
                 returnUser.setCreationDate(user.getCreationDate());
+                returnUser.setImageURL(user.getImageURL());
             }
         } catch (SQLException ex) {
             throw new MySQLDuplicateEntryException("Username or Email already in use");
@@ -269,17 +271,13 @@ public class UserMapper {
             conn = DBC.getConnection();
             //Prepared statement
             String sql;
-            sql = "UPDATE userstable SET imageURL = ? WHERE ID = ?;";
+            sql = "UPDATE userstable SET imageURL = ? WHERE ID = ?";
             pStmt = conn.prepareStatement(sql);
             pStmt.setString(1, imageURL);
             pStmt.setLong(2, userID);
-            boolean succes = pStmt.execute();
-
-            if (!succes) {
-                throw new ImageException();
-            }
+            pStmt.executeUpdate();
         } catch (SQLException e) {
-            e.printStackTrace();
+            throw new ImageException();
         } finally {
             //finally block used to close resources
             try {

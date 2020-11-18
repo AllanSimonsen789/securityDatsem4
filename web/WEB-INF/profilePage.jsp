@@ -17,14 +17,7 @@
     <body>
         <h1>Welcome <c:out value="${user.getUserName()}"/>!</h1>
 
-        <c:choose>
-            <c:when test="${user.getImageURL() != null}">
-                <img alt="profilepic" src="${user.getImageURL()}"/></br>
-            </c:when>
-            <c:otherwise>
-                <img alt="profilepic" src="https://res.cloudinary.com/dmk5yii3m/image/upload/v1578904570/defaut_vignette_carre_xavv98.jpg"/></br>
-            </c:otherwise>
-        </c:choose>
+        <img alt="profilepic" src="${user.getImageURL()}" style="width: 256px; height: 256px;"/></br>
 
         <p>User ID: <c:out value="${user.getUserID()}"/></p>
 

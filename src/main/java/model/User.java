@@ -33,6 +33,7 @@ public class User {
         this.email = email;
         this.role = "user";
         this.creationDate = LocalDateTime.now(ZoneId.of("Europe/Copenhagen"));
+        this.imageURL = "https://res.cloudinary.com/dmk5yii3m/image/upload/v1605704326/Security/Users-User-Male-4-icon_cuefxg.png";
     }
 
     public User(String userName, String password, String email, String imageURL) {

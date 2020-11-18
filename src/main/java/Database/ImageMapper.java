@@ -33,7 +33,6 @@ public class ImageMapper {
 
 
     public ImageMapper() {
-        System.out.println("Hello Not working");
         if (OS.contains("win") || OS.contains("mac")) {
             working_dir = System.getProperty("user.dir");
         } else if (OS.contains("nix") || OS.contains("nux") || OS.contains("aix")) {
@@ -49,10 +48,10 @@ public class ImageMapper {
                     "cloud_name", pros.getProperty("cloud_name"),
                     "api_key", pros.getProperty("api_key"),
                     "api_secret", pros.getProperty("api_secret")));
+
         } catch (IOException e) {
             e.printStackTrace();
         }
-        System.out.println("Not working");
     }
 
     public String uploadProfilePic(List<Part> parts) throws ImageException {
