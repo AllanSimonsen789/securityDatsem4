@@ -26,7 +26,7 @@ import Exception.ImageException;
  */
 public class ImageMapper {
 
-    private static final String UPLOAD_DIR = "img";
+    private static final String UPLOAD_DIR = "securityImg";
     private static final String OS = System.getProperty("os.name").toLowerCase();
     private static String working_dir = null;
     private static Cloudinary cloudinary;

@@ -27,18 +27,22 @@
 <%@ page contentType="text/html;charset=UTF-8" language="java" %>
 <html>
     <head>
+        <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/css/bootstrap.min.css"
+              integrity="sha384-Gn5384xqQ1aoWXA+058RXPxPg6fy4IWvTNh0E263XmFcJlSAwiGgFAW/dAiS6JXm" crossorigin="anonymous">
         <title>Secret Admin Page</title>
     </head>
     <body>
-        <h1>Secret admin page!</h1>
+        <div align="center">
+            <h1>Secret admin page!</h1>
 
-        <h2>No normal users are allowed!</h2>
+            <h2>No normal users are allowed!</h2>
 
-        <h3>Skal nok routes igennem en admin servlet. Så kan vi måske også lægge et filter ned over den servlet.
-            Så vi kan garantere at man kun kan tilgå den hvis man har admin role på useren som ligger i ens session.</h3>
+    <%--        <h3>Skal nok routes igennem en admin servlet. Så kan vi måske også lægge et filter ned over den servlet.--%>
+    <%--            Så vi kan garantere at man kun kan tilgå den hvis man har admin role på useren som ligger i ens session.</h3>--%>
 
-        <form action="/index.jsp">
-            <input type="submit" value="Back to frontpage" />
-        </form>
+            <form action="/index.jsp">
+                <input type="submit" value="Back to frontpage" class="btn btn-primary"/>
+            </form>
+        </div>
     </body>
 </html>

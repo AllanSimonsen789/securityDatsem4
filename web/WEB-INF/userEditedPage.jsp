@@ -21,25 +21,29 @@
 <%@ page contentType="text/html;charset=UTF-8" language="java" %>
 <html>
     <head>
+        <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/css/bootstrap.min.css"
+              integrity="sha384-Gn5384xqQ1aoWXA+058RXPxPg6fy4IWvTNh0E263XmFcJlSAwiGgFAW/dAiS6JXm" crossorigin="anonymous">
         <title>Successful edit</title>
     </head>
     <body>
-        <h1>Successful</h1>
+        <div align="center">
+            <h1>Successful</h1>
 
-        <p>Your user information was updated!</p>
+            <p>Your user information was updated!</p>
 
-        <p>Username: <c:out value="${username}" /></p>
+            <p>Username: <c:out value="${username}" /></p>
 
-        <p>User email: <c:out value="${email}" /></p>
+            <p>User email: <c:out value="${email}" /></p>
 
-        <p style="color:red"><c:out value="${errorMessage}" /></p>
+            <p style="color:red"><c:out value="${errorMessage}" /></p>
 
-        <form action="/forum">
-            <input type="submit" value="Go to the Forum" />
-        </form>
+            <form action="/forum">
+                <input type="submit" value="Go to the Forum" class="btn btn-primary"/>
+            </form>
 
-        <form action="/index.jsp">
-            <input type="submit" value="Back to frontpage" />
-        </form>
+            <form action="/index.jsp">
+                <input type="submit" value="Back to frontpage" class="btn btn-primary"/>
+            </form>
+        </div>
     </body>
 </html>
