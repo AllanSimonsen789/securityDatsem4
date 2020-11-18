@@ -34,7 +34,7 @@
 
             <c:forEach var="reply" items="${replies}">
                 </br></br>
-                <strong>Reply: <c:out value="${reply.getUsername()}"/></strong> Posted on: <c:out value="${post.getCreationDate()}"/></br>
+                <strong>Reply: <c:out value="${reply.getUsername()}"/></strong> Posted on: <c:out value="${reply.getCreationDate()}"/></br>
                     Reply Content: </br>
                         <c:out value="${reply.getContens()}"/></br></br>
             </c:forEach>
