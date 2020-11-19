@@ -7,12 +7,8 @@ import javax.servlet.http.Part;
 import java.io.File;
 import java.io.IOException;
 import java.io.InputStream;
-import java.sql.Connection;
-import java.sql.PreparedStatement;
-import java.sql.ResultSet;
-import java.sql.SQLException;
-import java.util.ArrayList;
-import java.util.List;
+import java.nio.file.Files;
+import java.nio.file.StandardCopyOption;
 import java.util.Map;
 import java.util.Properties;
 
@@ -54,44 +50,35 @@ public class ImageMapper {
         }
     }
 
-    public String uploadProfilePic(List<Part> parts) throws ImageException {
+    public String uploadProfilePic(Part part) throws ImageException, IOException {
         String returnString = "";
-        try {
-            //Creates img folder if none exist(temporary storage for image before uploaded to cloudinary)
-            File uploadFolder = new File(working_dir + File.separator + UPLOAD_DIR);
-            if (!uploadFolder.exists()) {
-                uploadFolder.mkdirs();
+        if (part.getContentType() != null && part.getSize() > 0) {
+            String contentType = part.getContentType();
+            // allows JPEG & PNG files to be uploaded
+            // Check mime type. <- getContentType is the same headder as Mime type.
+            // Check image type, and create temporary file.
+            String fileSuffix = "";
+            switch (contentType.toLowerCase()) {
+                case "image/jpeg":
+                    fileSuffix = ".jpeg";
+                    break;
+                case "image/png":
+                    fileSuffix = ".png";
+                    break;
+                default:
+                    throw new ImageException("Unsupported image type! Must be JPG, JPEG or PNG.");
             }
-
-            for (Part part : parts) {
-                if (part.getContentType() != null && part.getSize() > 0) {
-                    String fileName = "tmpRandomGeneratedFileNameNeeded.PNG";
-                    String contentType = part.getContentType();
-
-                    // allows JPEG & PNG files to be uploaded
-                    if (contentType != null && (contentType.equalsIgnoreCase("image/jpeg")
-                            || contentType.equalsIgnoreCase("image/png"))) {
-                        part.write(working_dir + File.separator + UPLOAD_DIR
-                                + File.separator + fileName);
-                        File file = new File(working_dir + File.separator
-                                + UPLOAD_DIR + File.separator + fileName);
-
-                        Map uploadResult = null;
-                        String URL = null;
-                        Boolean bool = false;
-
-                        uploadResult = cloudinary.uploader().upload(file, ObjectUtils.emptyMap());
-
-                        returnString = (String) uploadResult.get(new String("url"));
-
-                        file.delete();
-                    }
-                }
-            }
-        } catch (IOException e) {
-            e.printStackTrace();
-            throw new ImageException("Could not upload the chosen pictures. "
-                    + "Please make sure they are JPEG or PNG and try again.");
+            // Create a temporary file.
+            // Copy the uploaded image to the temp file.
+            // Upload the image to cloudinary.
+            // Delete the local file.
+            File directory = new File(working_dir + File.separator + UPLOAD_DIR);
+            File file = File.createTempFile("temp", fileSuffix, directory);
+            Files.copy(part.getInputStream(), file.toPath(), StandardCopyOption.REPLACE_EXISTING);
+            Map uploadResult = null;
+            uploadResult = cloudinary.uploader().upload(file, ObjectUtils.emptyMap());
+            returnString = (String) uploadResult.get("url");
+            file.delete();
         }
         return returnString;
     }

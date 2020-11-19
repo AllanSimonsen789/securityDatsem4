@@ -56,7 +56,7 @@ public class UserController extends HttpServlet {
                         response.sendRedirect("/profile");
                         //request.getRequestDispatcher("/WEB-INF/profilePage.jsp").forward(request, response);
                     } else {
-                        throw new AuthenticationException("SoMeThInG WeNt WrOnG :(");
+                        throw new AuthenticationException("SoMeThInG WeNt WrOnG :'(");
                     }
                 } catch (AuthenticationException e) {
                     request.setAttribute("errorMessage", "Invalid login and password. Try again");

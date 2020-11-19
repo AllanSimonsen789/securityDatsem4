@@ -47,9 +47,11 @@
             <p>Upload Profile Pic</p>
 
             <form action="/profile" method="post" enctype="multipart/form-data">
-                <input type="file" name="file" size="50"/> <br/>
+                <input type="file" name="fileContent" size="50"/> <br/>
                 <input type="submit" value="Upload File" class="btn btn-primary"/>
             </form>
+
+            <p style="color:red"><c:out value="${errorMessage}"/></p>
         </div>
     </body>
 </html>
