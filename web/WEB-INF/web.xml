@@ -7,7 +7,6 @@
         <session-timeout>30</session-timeout>
     </session-config>
 
-
     <servlet>
         <servlet-name>UserController</servlet-name>
         <servlet-class>Controllers.UserController</servlet-class>

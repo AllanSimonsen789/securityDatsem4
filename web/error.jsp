@@ -6,7 +6,7 @@
   To change this template use File | Settings | File Templates.
   Reference: https://cheatsheetseries.owasp.org/cheatsheets/Error_Handling_Cheat_Sheet.html
 --%>
-<%@ page language="java" isErrorPage="true" contentType="text/html;charset=UTF-8" %>
+<%@ page language="java" isErrorPage="true" contentType="text/html;encoding=UTF-8" %>
 <%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
 
 <%--<%--%>
@@ -21,6 +21,8 @@
 <%--{"message":"An error occurred, please retry"}--%>
 <html>
     <head>
+        <meta charset="UTF-8">
+        <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
         <meta http-equiv="Content-Type" content="text/html; charset=US-ASCII">
         <title>Error Page</title>
     </head>
