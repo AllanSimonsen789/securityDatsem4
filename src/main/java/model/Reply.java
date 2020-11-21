@@ -8,6 +8,7 @@ public class Reply {
     private long replyID; //We use this id to filter the order of the replys to a certain post. - auto increment in db.
     private long userID;
     private String username;
+    private String role;
     private long postID;
     private String contens;
     private LocalDateTime creationDate;
@@ -27,10 +28,11 @@ public class Reply {
         this.creationDate = creationDate;
     }
 
-    public Reply(long replyID, long userID, String username, long postID, String contens, LocalDateTime creationDate) {
+    public Reply(long replyID, long userID, String username,String role, long postID, String contens, LocalDateTime creationDate) {
         this.replyID = replyID;
         this.userID = userID;
         this.username = username;
+        this.role = role;
         this.postID = postID;
         this.contens = contens;
         this.creationDate = creationDate;
@@ -55,4 +57,8 @@ public class Reply {
     public LocalDateTime getCreationDate() { return creationDate; }
 
     public void setContens(String contens) { this.contens = contens; }
+
+    public String getRole() { return role; }
+
+    public void setRole(String role) { this.role = role; }
 }

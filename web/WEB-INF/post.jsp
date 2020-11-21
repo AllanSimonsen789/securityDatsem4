@@ -30,13 +30,33 @@
 
             <h2><c:out value="${post.getPostTitle()}"/></h2>
 
-            <h3>ID: <c:out value="${post.getUserID()}"/> - Posted By: <c:out value="${post.getUsername()}"/> - Posted On: <c:out value="${post.getCreationDate()}"/></h3>
+            <h3>ID: <c:out value="${post.getUserID()}"/> - Posted By: <c:choose>
+                <c:when test="${post.getRole() == 'admin'}">
+                    <div class="certAdmin">
+                        <p style="color:blue"><c:out value="${post.getUsername()}"/></p>
+                        <span class="certAdminText"> Certified admin </span>
+                    </div>
+                </c:when>
+                <c:otherwise>
+                    <c:out value="${post.getUsername()}"/>
+                </c:otherwise>
+            </c:choose></br> - Posted On: <c:out value="${post.getCreationDate()}"/></h3>
 
             <p><c:out value="${post.getContens()}"/></p>
 
             <c:forEach var="reply" items="${replies}">
                 </br></br>
-                <strong>Reply: <c:out value="${reply.getUsername()}"/></strong> Posted on: <c:out value="${reply.getCreationDate()}"/></br>
+                <strong>Reply:<c:choose>
+                    <c:when test="${reply.getRole() == 'admin'}">
+                        <div class="certAdminReply">
+                            <p style="color:blue"><c:out value="${reply.getUsername()}"/></p>
+                            <span class="certAdminText"> Certified admin </span>
+                        </div>
+                    </c:when>
+                    <c:otherwise>
+                        <c:out value="${reply.getUsername()}"/>
+                    </c:otherwise>
+                </c:choose></strong> Posted on: <c:out value="${reply.getCreationDate()}"/></br>
                     Reply Content: </br>
                         <c:out value="${reply.getContens()}"/></br></br>
             </c:forEach>
@@ -57,6 +77,55 @@
                     <p>Please login to reply to this debate!</p>
                 </c:otherwise>
             </c:choose>
+            <p style="color:red"><c:out value="${errorMessage}" /></p>
         </div>
     </body>
+    <style>
+        .certAdmin {
+            position: relative;
+            display: inline-block;
+            border-bottom: 1px dotted black;
+            height: 37px;
+        }
+        .certAdminReply{
+            position: relative;
+            display: inline-block;
+            border-bottom: 1px dotted black;
+            height: 21px;
+        }
+
+        .certAdmin .certAdminText {
+            visibility: hidden;
+            width: 300px;
+            background-color: black;
+            color: #fff;
+            text-align: center;
+            border-radius: 6px;
+            padding: 5px 0;
+
+            /* Position the tooltip */
+            position: absolute;
+            z-index: 1;
+        }
+        .certAdminReply .certAdminText {
+            visibility: hidden;
+            width: 300px;
+            background-color: black;
+            color: #fff;
+            text-align: center;
+            border-radius: 6px;
+            padding: 5px 0;
+
+            /* Position the tooltip */
+            position: absolute;
+            z-index: 1;
+        }
+
+        .certAdmin:hover .certAdminText {
+            visibility: visible;
+        }
+        .certAdminReply:hover .certAdminText {
+            visibility: visible;
+        }
+    </style>
 </html>

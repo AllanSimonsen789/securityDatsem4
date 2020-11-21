@@ -1,15 +1,12 @@
 package Database;
 
 import Exception.ForumException;
-import model.Post;
 import model.Reply;
-import model.User;
 
 import java.io.IOException;
 import java.sql.*;
 import java.time.LocalDateTime;
 import java.util.ArrayList;
-import java.util.Date;
 
 /**
  * Created by IntelliJ IDEA.
@@ -56,6 +53,7 @@ public class ReplyMapper {
                 long replyid = rs.getLong("id");
                 long userid = rs.getLong("userid");
                 String username = rs.getString("username");
+                String role = rs.getString("role");
                 String content = rs.getString("content");
                 LocalDateTime posttime = LocalDateTime.of(1889, 4, 20, 12, 00);
                 try {
@@ -63,7 +61,7 @@ public class ReplyMapper {
                 } catch (Exception e) {
                     e.printStackTrace();
                 }
-                returnlist.add(new Reply(replyid, userid, username, new Long(id), content, posttime));
+                returnlist.add(new Reply(replyid, userid, username, role, new Long(id), content, posttime));
             }
         } catch (SQLException e) {
             e.printStackTrace();

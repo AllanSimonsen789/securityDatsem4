@@ -1,12 +1,10 @@
 package Controllers;
 
 import Database.ForumMapper;
-import Database.ReplyMapper;
-import Exception.ForumException;
 import ExtraClasses.SecureRandomString;
 import ExtraClasses.SessionHelper;
-import model.Post;
-import model.Reply;
+import model.ForumPost;
+import Exception.ForumException;
 import model.User;
 
 import javax.servlet.ServletException;
@@ -20,32 +18,37 @@ import java.time.LocalDateTime;
 import java.time.ZoneId;
 import java.util.ArrayList;
 
-@WebServlet(name = "PostController")
-public class PostController extends HttpServlet {
+@WebServlet(name = "ForumPostController")
+public class ForumPostController extends HttpServlet {
     protected void doPost(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
         request.setAttribute("web_csrf_token", SecureRandomString.genSecureRandomString());
         try {
-            String content = request.getParameter("content");
+            String title = request.getParameter("title").trim();
+            String content = request.getParameter("content").trim();
+            if(title.equals("") || content.equals("")){
+                throw new ForumException("Please fill out the form.");
+            }
             HttpSession session = request.getSession();
             User sessionUser = (User) session.getAttribute("username");
             int userid = (int) sessionUser.getUserID();
-            int postid = Integer.parseInt(request.getParameter("postid"));
-            Reply newReply = new Reply(userid, postid, content);
+            LocalDateTime created = LocalDateTime.now(ZoneId.of("Europe/Copenhagen"));
+            ForumPost newForumPost = new ForumPost(userid, title, content, created);
 
-            ReplyMapper rm = ReplyMapper.getInstance();
-            newReply = rm.createReply(newReply);
-            request.setAttribute("confirmation", "The reply was succesfully created with id: " + newReply.getReplyID());
+            ForumMapper fm = ForumMapper.getInstance();
+            newForumPost = fm.createPost(newForumPost);
+            request.setAttribute("confirmation", "The post was succesfully created with id: " + newForumPost.getPostID());
 
             //Renew session id.
             session.invalidate();
             session = request.getSession(true);
             session.setAttribute("username", sessionUser);
 
-            response.sendRedirect(request.getRequestURL().toString() + "?post=" + postid);
+            //ForceReload the page
+            response.sendRedirect(request.getRequestURL().toString());
+
         } catch (ForumException e) {
-            e.printStackTrace();
-            request.setAttribute("errorMessage", "Something went wrong");
-            request.getRequestDispatcher("/WEB-INF/post.jsp").forward(request, response);
+            request.setAttribute("errorMessage", e.getMessage());
+            request.getRequestDispatcher("/WEB-INF/forum.jsp").forward(request, response);
         }
     }
 
@@ -54,18 +57,24 @@ public class PostController extends HttpServlet {
         //Rotate session ID, with the same user.
         HttpSession session = request.getSession();
         User sessionUser = (User) session.getAttribute("username");
+
         if(sessionUser != null){
-            SessionHelper.rotateSessionIDWithUser(session, request, sessionUser);
+            SessionHelper.rotateSessionIDWithUser(request.getSession(), request, sessionUser);
         } else {
             //The user hasn't logged in, and can't comment or create a new forum post.
             SessionHelper.rotateSessionIDWithoutUser(session, request);
         }
-        int postid = Integer.parseInt(request.getParameter("post"));
         ForumMapper fm = ForumMapper.getInstance();
-        ReplyMapper rm = ReplyMapper.getInstance();
-        request.setAttribute("post", fm.fetchPost(postid));
-        request.setAttribute("replies", rm.fetchreplies(postid));
-
-        request.getRequestDispatcher("/WEB-INF/post.jsp").forward(request, response);
+        ArrayList<ForumPost> postlist = fm.fetchPosts();
+        request.setAttribute("arraylen", postlist.size());
+        request.setAttribute("postlist", postlist);
+        request.getRequestDispatcher("/WEB-INF/forum.jsp").forward(request, response);
+        /*if(request.getRequestURL().equals("/login")) {
+            response.sendRedirect("index.jsp");
+        } else if(request.getRequestURL().equals("/logout")) {
+            HttpSession session=request.getSession(false);
+            session.invalidate();
+            response.sendRedirect("index.jsp");
+        }*/
     }
 }

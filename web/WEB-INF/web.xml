@@ -30,45 +30,24 @@
         <url-pattern>/secretAdminPage</url-pattern>
     </servlet-mapping>
 
-    <!--    <servlet>-->
-    <!--        <servlet-name>LoginController</servlet-name>-->
-    <!--        <servlet-class>Controllers.LoginController</servlet-class>-->
-    <!--    </servlet>-->
-    <!--    -->
-    <!--    <servlet-mapping>-->
-    <!--        <servlet-name>LoginController</servlet-name>-->
-    <!--        <url-pattern>/login</url-pattern>-->
-    <!--        <url-pattern>/logout</url-pattern>-->
-    <!--    </servlet-mapping>-->
-    <!--    -->
-    <!--    <servlet>-->
-    <!--        <servlet-name>RegistrationController</servlet-name>-->
-    <!--        <servlet-class>Controllers.RegistrationController</servlet-class>-->
-    <!--    </servlet>-->
-    <!--    -->
-    <!--    <servlet-mapping>-->
-    <!--        <servlet-name>RegistrationController</servlet-name>-->
-    <!--        <url-pattern>/register</url-pattern>-->
-    <!--    </servlet-mapping>-->
-
     <servlet-mapping>
-        <servlet-name>ForumController</servlet-name>
+        <servlet-name>ForumPostController</servlet-name>
         <url-pattern>/forum</url-pattern>
     </servlet-mapping>
 
     <servlet>
-        <servlet-name>ForumController</servlet-name>
-        <servlet-class>Controllers.ForumController</servlet-class>
+        <servlet-name>ForumPostController</servlet-name>
+        <servlet-class>Controllers.ForumPostController</servlet-class>
     </servlet>
 
     <servlet-mapping>
-        <servlet-name>PostController</servlet-name>
+        <servlet-name>ReplyController</servlet-name>
         <url-pattern>/post</url-pattern>
     </servlet-mapping>
 
     <servlet>
-        <servlet-name>PostController</servlet-name>
-        <servlet-class>Controllers.PostController</servlet-class>
+        <servlet-name>ReplyController</servlet-name>
+        <servlet-class>Controllers.ReplyController</servlet-class>
     </servlet>
 
     <servlet-mapping>

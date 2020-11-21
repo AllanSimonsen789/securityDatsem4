@@ -1,8 +1,7 @@
 package Database;
 
-import Exception.MySQLDuplicateEntryException;
 import Exception.ForumException;
-import model.Post;
+import model.ForumPost;
 import model.User;
 
 import java.io.IOException;
@@ -34,12 +33,12 @@ public class ForumMapper {
     }
 
 
-    public Post fetchPost(int id) {
-        Post returnpost = null;
+    public ForumPost fetchPost(int id) {
+        ForumPost returnpost = null;
         PreparedStatement pStmt = null;
         Connection conn = null;
         ResultSet rs = null;
-        ArrayList<Post> returnlist = new ArrayList<>();
+        ArrayList<ForumPost> returnlist = new ArrayList<>();
         try {
             //Create connection
             conn = DBC.getConnection();
@@ -56,6 +55,7 @@ public class ForumMapper {
                 //Retrieve by column name
                 long userid = rs.getLong("userid");
                 String username = rs.getString("username");
+                String role = rs.getString("role");
                 String title = rs.getString("title");
                 String content = rs.getString("content");
                 LocalDateTime posttime = LocalDateTime.of(1889, 4, 20, 12, 00);
@@ -64,7 +64,7 @@ public class ForumMapper {
                 } catch (Exception e) {
                     e.printStackTrace();
                 }
-                returnpost = new Post(id, userid, username, title, content, posttime);
+                returnpost = new ForumPost(id, userid, username, role, title, content, posttime);
             }
         } catch (SQLException e) {
             e.printStackTrace();
@@ -82,12 +82,12 @@ public class ForumMapper {
         return returnpost;
     }
 
-    public ArrayList<Post> fetchPosts() {
+    public ArrayList<ForumPost> fetchPosts() {
         User sqlBuildUser = new User();
         PreparedStatement pStmt = null;
         Connection conn = null;
         ResultSet rs = null;
-        ArrayList<Post> returnlist = new ArrayList<>();
+        ArrayList<ForumPost> returnlist = new ArrayList<>();
         try {
             //Create connection
             conn = DBC.getConnection();
@@ -104,6 +104,7 @@ public class ForumMapper {
                 long id = rs.getLong("id");
                 long userid = rs.getLong("userid");
                 String username = rs.getString("username");
+                String role = rs.getString("role");
                 String title = rs.getString("title");
                 String content = rs.getString("content");
                 LocalDateTime posttime = LocalDateTime.of(1889, 4, 20, 12, 00);
@@ -112,7 +113,7 @@ public class ForumMapper {
                 } catch (Exception e) {
                     e.printStackTrace();
                 }
-                returnlist.add(new Post(id, userid, username, title, content, posttime));
+                returnlist.add(new ForumPost(id, userid, username, role, title, content, posttime));
             }
         } catch (SQLException e) {
             e.printStackTrace();
@@ -130,8 +131,8 @@ public class ForumMapper {
         return returnlist;
     }
 
-    public Post createPost(Post post) throws ForumException {
-        Post returnPost = null;
+    public ForumPost createPost(ForumPost post) throws ForumException {
+        ForumPost returnPost = null;
         PreparedStatement pStmt = null;
         Connection conn = null;
         ResultSet rs = null;

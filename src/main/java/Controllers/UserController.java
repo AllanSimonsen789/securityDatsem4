@@ -151,16 +151,14 @@ public class UserController extends HttpServlet {
                 User sessionUser = (User) session.getAttribute("username");
                 //Edit user in DB
                 User editedUser = um.Edit(sessionUser.getUserID(), newUsername, newPassword, newEmail);
-                //We need to add the old ID to the new session user.
-                editedUser.setUserID(sessionUser.getUserID());
                 if (editedUser.getEmail() == null) {
-                    editedUser.setEmail(sessionUser.getEmail());
+                    sessionUser.setEmail(editedUser.getEmail());
                 }
                 if (editedUser.getUserName() == null) {
-                    editedUser.setUserName(sessionUser.getUserName());
+                    sessionUser.setUserName(editedUser.getUserName());
                 }
-                //Reset user in session, replace with the edited user
-                SessionHelper.rotateSessionIDWithUser(session, request, editedUser);
+                //Reset user in session, with editUser data
+                SessionHelper.rotateSessionIDWithUser(session, request, sessionUser);
 
                 request.setAttribute("username", editedUser.getUserName());
                 request.setAttribute("id", editedUser.getUserID());

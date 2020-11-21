@@ -33,8 +33,8 @@
                 New password: <input type="password" name="newPassword" width="10" min="12" max="200"/></br></br>
                 Retype password: <input type="password" name="newPassword2" placeholder="Retype Password" width="10" min="12"
                                         max="200"/></br></br>
-                <div class="tooltip">Password Requirements
-                    <span class="tooltiptext"> Atleast 1 uppercase letter <br> Atleast 1 lowercase letter <br> Atleast 1 Number <br> Atleast 12 characters long </span>
+                <div class="passwprdReq">Password Requirements
+                    <span class="passwprdReqText"> Atleast 1 uppercase letter <br> Atleast 1 lowercase letter <br> Atleast 1 Number <br> Atleast 12 characters long </span>
                 </div>
                 </br>
                 <div style="margin-top: 20px" class="g-recaptcha"
@@ -46,13 +46,13 @@
         </div>
     </body>
     <style>
-        .tooltip {
+        .passwprdReq {
             position: relative;
             display: inline-block;
             border-bottom: 1px dotted black;
         }
 
-        .tooltip .tooltiptext {
+        .passwprdReq .passwprdReqText {
             visibility: hidden;
             width: 300px;
             background-color: black;
@@ -66,7 +66,7 @@
             z-index: 1;
         }
 
-        .tooltip:hover .tooltiptext {
+        .passwprdReq:hover .passwprdReqText {
             visibility: visible;
         }
     </style>
