@@ -76,7 +76,12 @@ public class ImageMapper {
             File file = File.createTempFile("temp", fileSuffix, directory);
             Files.copy(part.getInputStream(), file.toPath(), StandardCopyOption.REPLACE_EXISTING);
             Map uploadResult = null;
-            uploadResult = cloudinary.uploader().upload(file, ObjectUtils.emptyMap());
+            try{
+            uploadResult = cloudinary.uploader().upload(file, Cloudinary.asMap("upload_preset", "ml_default"));
+            } catch (RuntimeException e){
+                file.delete();
+                throw new ImageException("Unsupported image type! Must be JPG, JPEG or PNG.");
+            }
             returnString = (String) uploadResult.get("url");
             file.delete();
         }

@@ -10,10 +10,7 @@ import javax.servlet.ServletException;
 import javax.servlet.annotation.MultipartConfig;
 import javax.servlet.annotation.WebServlet;
 import javax.servlet.http.*;
-import java.io.File;
 import java.io.IOException;
-import java.nio.file.Path;
-import java.util.List;
 
 import Exception.ImageException;
 import Exception.IllegalArgumentException;

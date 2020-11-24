@@ -28,10 +28,14 @@ import java.io.IOException;
 @WebServlet(name = "UserController")
 public class UserController extends HttpServlet {
     protected void doPost(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
+        System.out.println(request.getParameter("web_token"));
         if (SecureRandomString.validateSecureString(request.getParameter("web_token"))) {
+            //User is the same.
+            System.out.println("Validate sucsess");
             request.setAttribute("csrf_success_error", "Tokens are equal");
             request.setAttribute("web_csrf_token", SecureRandomString.genSecureRandomString());
         } else {
+            System.out.println("Validate error");
             request.setAttribute("csrf_success_error", "Tokens are NOT equal");
             request.setAttribute("web_csrf_token", SecureRandomString.genSecureRandomString());
         }
