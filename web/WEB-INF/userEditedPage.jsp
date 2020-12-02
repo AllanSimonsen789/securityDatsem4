@@ -43,7 +43,7 @@
                 <input type="submit" value="Go to the Forum" class="btn btn-primary"/>
             </form>
 
-            <form action="/index.jsp">
+            <form action="/index">
                 <input type="submit" value="Back to frontpage" class="btn btn-primary"/>
             </form>
         </div>

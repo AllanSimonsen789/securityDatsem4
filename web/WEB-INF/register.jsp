@@ -21,11 +21,13 @@
         <div align="center">
             <h2>Register</h2>
 
-            <form action="/index.jsp">
+            <form action="/index">
+                <input type="hidden" name="web_token" value="<c:out value="${web_csrf_token}" />">
                 <input type="submit" value="Back to frontpage" class="btn btn-primary"/>
             </form>
 
             <form action="/register" method="post">
+                <input type="hidden" name="web_token" value="<c:out value="${web_csrf_token}" />">
                 Username: <input type="text" name="loginname" width="30" min="5" max="50" value="<c:out value="${loginname}" />"
                                  required/></br></br>
                 Email: <input type="text" name="email" width="30" value="<c:out value="${email}" />" required/></br></br>

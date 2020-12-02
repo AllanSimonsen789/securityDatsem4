@@ -20,11 +20,13 @@
         <div align="center">
             <h1>Forum Post</h1>
 
-            <form action="/index.jsp">
+            <form action="/index">
+                <input type="hidden" name="web_token" value="<c:out value="${web_csrf_token}" />">
                 <input type="submit" value="Back to frontpage" class="btn btn-primary"/>
             </form>
 
             <form action="/forum">
+                <input type="hidden" name="web_token" value="<c:out value="${web_csrf_token}" />">
                 <input type="submit" value="Back to the forum" class="btn btn-primary"/>
             </form>
 
@@ -46,6 +48,7 @@
 
             <c:forEach var="reply" items="${replies}">
                 </br></br>
+                <div style="border-style: solid; width: 50%">
                 <strong>Reply:<c:choose>
                     <c:when test="${reply.getRole() == 'admin'}">
                         <div class="certAdminReply">
@@ -56,9 +59,10 @@
                     <c:otherwise>
                         <c:out value="${reply.getUsername()}"/>
                     </c:otherwise>
-                </c:choose></strong> Posted on: <c:out value="${reply.getCreationDate()}"/></br>
+                </c:choose></strong> Posted on: <c:out value="${reply.getCreationDate()}"/>
                     Reply Content: </br>
                         <c:out value="${reply.getContens()}"/></br></br>
+                </div>
             </c:forEach>
 
             <p style="color:blue"><c:out value="${confirmation}" /></p>
@@ -67,7 +71,8 @@
 
             <c:choose>
                 <c:when test="${sessionScope.get('username') !=null}">
-                    <form action="/post?post=<c:out value="${post.getPostID()}"/>" method="post">
+                    <form action="/post" method="post">
+                        <input type="hidden" name="web_token" value="<c:out value="${web_csrf_token}" />">
                         <textarea name="content" style="resize: none;" rows="4" cols="50" placeholder="Make a reply here" required></textarea></br>
                         <input type = "hidden" name = "postid" value = "<c:out value="${post.getPostID()}"/>"></br>
                         <input type="submit" value="Submit Reply" class="btn btn-primary"/>

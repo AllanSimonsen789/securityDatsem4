@@ -20,7 +20,8 @@
         <div align="center">
             <h1>DEBATE FORUM</h1>
 
-            <form action="/index.jsp">
+            <form action="/index">
+                <input type="hidden" name="web_token" value="<c:out value="${web_csrf_token}" />">
                 <input type="submit" value="Back to frontpage" class="btn btn-primary"/>
             </form>
 
@@ -29,6 +30,7 @@
             <c:choose>
                 <c:when test="${sessionScope.get('username') !=null}">
                     <form action="/forum" method="post">
+                        <input type="hidden" name="web_token" value="<c:out value="${web_csrf_token}" />">
                         Title: <input type="text" name="title" width="30" required/></br>
                         Content: </br>
                         <textarea name="content" rows="4" cols="50" placeholder="Start New Discussion Here"
@@ -50,26 +52,29 @@
 
             <c:forEach var="post" items="${postlist}">
                 </br></br>
-                <a style="color: inherit; width: 50%" href="/post?post=<c:out value="${post.getPostID()}"/>">
+                <form action="/post" method="get">
+                    <input type="hidden" name="web_token" value="<c:out value="${web_csrf_token}" />">
+                    <input type="hidden" name="postID" value="<c:out value="${post.getPostID()}" />">
                     <div style="border-style: solid; width: 50%">
                         <strong>Title: <c:out
                                 value="${post.getPostTitle()}"/></strong></br>
                         ID: <c:out value="${post.getPostID()}"/> Posted by: <c:choose>
-                        <c:when test="${post.getRole() == 'admin'}">
-                            <div class="certAdmin">
-                                <p style="color:blue"><c:out value="${post.getUsername()}"/></p>
-                                <span class="certAdminText"> Certified admin </span>
-                            </div>
-                        </c:when>
-                        <c:otherwise>
-                            <c:out value="${post.getUsername()}"/>
-                        </c:otherwise>
-                    </c:choose></br>
+                            <c:when test="${post.getRole() == 'admin'}">
+                                <div class="certAdmin">
+                                    <p style="color:blue"><c:out value="${post.getUsername()}"/></p>
+                                    <span class="certAdminText"> Certified admin </span>
+                                </div>
+                            </c:when>
+                            <c:otherwise>
+                                <c:out value="${post.getUsername()}"/>
+                            </c:otherwise>
+                        </c:choose>
                         Message Content: </br>
                             <c:out value="${post.getContens()}"/></br>
                         Posted on: <c:out value="${post.getCreationDate()}"/></br>
+                        <input type="submit" style="margin-bottom: 15px" value="Watch comments" class="btn btn-primary"/>
                     </div>
-                </a>
+                </form>
             </c:forEach>
             <p style="color:red"><c:out value="${errorMessage}"/></p>
         </div>

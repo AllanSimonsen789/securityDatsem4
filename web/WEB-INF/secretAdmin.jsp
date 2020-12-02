@@ -42,7 +42,8 @@
     <%--        <h3>Skal nok routes igennem en admin servlet. Så kan vi måske også lægge et filter ned over den servlet.--%>
     <%--            Så vi kan garantere at man kun kan tilgå den hvis man har admin role på useren som ligger i ens session.</h3>--%>
 
-            <form action="/index.jsp">
+            <form action="/index">
+                <input type="hidden" name="web_token" value="<c:out value="${web_csrf_token}" />">
                 <input type="submit" value="Back to frontpage" class="btn btn-primary"/>
             </form>
         </div>

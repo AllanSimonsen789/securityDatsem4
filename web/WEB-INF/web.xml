@@ -7,6 +7,7 @@
         <session-timeout>30</session-timeout>
     </session-config>
 
+    <!--   User controller -->
     <servlet>
         <servlet-name>UserController</servlet-name>
         <servlet-class>Controllers.UserController</servlet-class>
@@ -18,8 +19,10 @@
         <url-pattern>/logout</url-pattern>
         <url-pattern>/register</url-pattern>
         <url-pattern>/edit</url-pattern>
+        <url-pattern>/index</url-pattern>
     </servlet-mapping>
 
+    <!--   Admin page and functionality -->
     <servlet>
         <servlet-name>AdminController</servlet-name>
         <servlet-class>Controllers.AdminController</servlet-class>
@@ -30,6 +33,7 @@
         <url-pattern>/secretAdminPage</url-pattern>
     </servlet-mapping>
 
+    <!--   Forum posts -->
     <servlet-mapping>
         <servlet-name>ForumPostController</servlet-name>
         <url-pattern>/forum</url-pattern>
@@ -40,6 +44,7 @@
         <servlet-class>Controllers.ForumPostController</servlet-class>
     </servlet>
 
+    <!--   Replys on forum posts -->
     <servlet-mapping>
         <servlet-name>ReplyController</servlet-name>
         <url-pattern>/post</url-pattern>
@@ -50,6 +55,7 @@
         <servlet-class>Controllers.ReplyController</servlet-class>
     </servlet>
 
+    <!--   Profile controller -->
     <servlet-mapping>
         <servlet-name>ProfileController</servlet-name>
         <url-pattern>/profile</url-pattern>
