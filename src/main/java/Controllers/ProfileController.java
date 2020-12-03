@@ -81,7 +81,7 @@ public class ProfileController extends HttpServlet {
                 //Cleanup
                 iis.close();
 
-                if (mimeType.toLowerCase().equals("png") || mimeType.toLowerCase().equals("jpeg")){
+                if (mimeType.toLowerCase().equals("png") || mimeType.toLowerCase().equals("jpeg") || mimeType.toLowerCase().equals("jpg")){
                     UserMapper um = UserMapper.getInstance();
                     returnString = im.uploadProfilePic(img_file);
                     um.setProfilePic(sessionUser.getUserID(), returnString);
