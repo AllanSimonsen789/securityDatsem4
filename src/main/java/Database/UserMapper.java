@@ -48,9 +48,8 @@ public class UserMapper {
         pros.load(prob);
         //assign parameters
         KEY = new SecretKeySpec(pros.getProperty("key").getBytes(), CryptoMngr.ALGORITHM);
-        pros.getProperty("key");
         IV = new SecretKeySpec(pros.getProperty("IV").getBytes(), CryptoMngr.ALGORITHM);
-        pros.getProperty("V2");
+
     }
 
     //Login user
@@ -288,14 +287,4 @@ public class UserMapper {
             }
         }
     }
-
- /*   public static void main(String[] args) throws Exception {
-        UserMapper um = UserMapper.getInstance();
-        um.Edit(12,"", "", "Jody@hotmail.com");
-        //User user = um.Login("allan@sengekompagniet.dk1", "abc");
-        //System.out.println(user.getEmail() + " " + user.getUserName() + " " + user.getUserID());
-//        User u = um.Edit(13, "asd", "", "");
-//        System.out.println(u.getUserID());
-    }*/
-
 }

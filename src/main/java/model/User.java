@@ -1,11 +1,13 @@
 package model;
 
+import Database.DBConnection;
 import org.mindrot.jbcrypt.BCrypt;
 
+import java.io.IOException;
+import java.io.InputStream;
 import java.time.LocalDateTime;
 import java.time.ZoneId;
-import java.time.ZoneOffset;
-import java.util.Date;
+import java.util.Properties;
 
 public class User {
     private long userID;
@@ -16,8 +18,23 @@ public class User {
     private LocalDateTime creationDate;
     private String imageURL;
 
+    private static String pepper;
+
+    private static void setPepper(){
+        try{
+            InputStream prob = null;
+            prob = DBConnection.class.getResourceAsStream("/pepper.properties");
+            Properties pros = new Properties();
+            pros.load(prob);
+            pepper = pros.getProperty("pepper");
+        }catch(IOException e){
+            throw new RuntimeException();
+        }
+
+    }
+
     public User() {
-    }// Temporary - delete later.
+    }
 
     //Builds user after login
     public User(long userID, String userName, String email) {
@@ -29,7 +46,8 @@ public class User {
     //Register constructor
     public User(String userName, String password, String email) {
         this.userName = userName;
-        this.password = BCrypt.hashpw(password, BCrypt.gensalt(12));
+        if(pepper == null) {setPepper();}
+        this.password = BCrypt.hashpw(pepper + password, BCrypt.gensalt(12));
         this.email = email;
         this.role = "user";
         this.creationDate = LocalDateTime.now(ZoneId.of("Europe/Copenhagen"));
@@ -38,7 +56,8 @@ public class User {
 
     public User(String userName, String password, String email, String imageURL) {
         this.userName = userName;
-        this.password = BCrypt.hashpw(password, BCrypt.gensalt(12));
+        if(pepper == null) {setPepper();}
+        this.password = BCrypt.hashpw(pepper + password, BCrypt.gensalt(12));
         this.email = email;
         this.imageURL = imageURL;
         this.role = "user";
@@ -77,7 +96,8 @@ public class User {
 
     //Might not be needed.
     public void setPassword(String password) {
-        this.password = BCrypt.hashpw(password, BCrypt.gensalt(12));
+        if(pepper == null) {setPepper();}
+        this.password = BCrypt.hashpw(pepper + password, BCrypt.gensalt(12));
     }
 
     public void setUserID(long userID) { this.userID = userID; }
@@ -87,7 +107,8 @@ public class User {
     public void setRole(String role) { this.role = role; }
 
     public boolean verifyPassword(String typedPw, String sqlPW) {
-        return (BCrypt.checkpw(typedPw, sqlPW));
+        if(pepper == null){setPepper();}
+        return (BCrypt.checkpw(pepper + typedPw, sqlPW));
     }
 
 }
