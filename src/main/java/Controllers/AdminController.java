@@ -19,7 +19,16 @@ public class AdminController extends HttpServlet {
     }
 
     protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
-        request.setAttribute("web_csrf_token", SecureRandomString.genSecureRandomString());
+        if (!SecureRandomString.validateSecureString(request.getParameter("web_token"))) {
+            HttpSession session = request.getSession(false);
+            session.invalidate();
+            request.setAttribute("errorMessage", "Web tokens are NOT equal");
+            request.setAttribute("web_csrf_token", SecureRandomString.genSecureRandomString());
+            request.getRequestDispatcher("/WEB-INF/login.jsp").forward(request, response);
+        } else {
+            //Create new web_csrf_token.
+            request.setAttribute("web_csrf_token", SecureRandomString.genSecureRandomString());
+        }
         //Rotate session ID, with the same user.
         HttpSession session = request.getSession();
         User sessionUser = (User) session.getAttribute("username");

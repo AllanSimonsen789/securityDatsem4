@@ -32,21 +32,26 @@
 
             <p>Welcome to debateit, to continue your journey head over to the forum or go back to the main page</p>
 
+            <form action="/index">
+                <input type="hidden" name="web_token" value="<c:out value="${web_csrf_token}" />">
+                <input type="submit" value="Back to frontpage" class="btn btn-primary"/>
+            </form>
+
             <form action="/forum">
+                <input type="hidden" name="web_token" value="<c:out value="${web_csrf_token}" />">
                 <input type="submit" value="Go to the Forum" class="btn btn-primary"/>
             </form>
 
             <form action="/edit">
+                <input type="hidden" name="web_token" value="<c:out value="${web_csrf_token}" />">
                 <input type="submit" value="Edit user" class="btn btn-primary"/>
             </form>
 
-            <form action="/index.jsp">
-                <input type="submit" value="Back to frontpage" class="btn btn-primary"/>
-            </form>
 
             <p>Upload Profile Pic</p>
 
             <form action="/profile" method="post" enctype="multipart/form-data">
+                <input type="hidden" name="web_token" value="<c:out value="${web_csrf_token}" />">
                 <input type="file" name="fileContent" multiple accept=".jpg, .png" size="50"/> <br/>
                 <input type="submit" value="Upload File" class="btn btn-primary"/>
             </form>

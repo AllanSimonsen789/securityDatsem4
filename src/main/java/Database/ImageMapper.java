@@ -22,20 +22,10 @@ import Exception.ImageException;
  */
 public class ImageMapper {
 
-    private static final String UPLOAD_DIR = "securityImg";
-    private static final String OS = System.getProperty("os.name").toLowerCase();
-    private static String working_dir = null;
     private static Cloudinary cloudinary;
 
 
     public ImageMapper() {
-        if (OS.contains("win") || OS.contains("mac")) {
-            working_dir = System.getProperty("user.dir");
-        } else if (OS.contains("nix") || OS.contains("nux") || OS.contains("aix")) {
-            working_dir = System.getProperty("catalina.base");
-        } else {
-            working_dir = "";
-        }
         try (InputStream prob = ImageMapper.class.getResourceAsStream("/cloudinary.properties");) {
             Properties pros = new Properties();
             pros.load(prob);
@@ -50,36 +40,13 @@ public class ImageMapper {
         }
     }
 
-    public String uploadProfilePic(Part part) throws ImageException, IOException {
-        String returnString = "";
-        if (part.getContentType() != null && part.getSize() > 0) {
-            String contentType = part.getContentType();
-            // allows JPEG & PNG files to be uploaded
-            // Check mime type. <- getContentType is the same headder as Mime type.
-            // Check image type, and create temporary file.
-            String fileSuffix = "";
-            switch (contentType.toLowerCase()) {
-                case "image/jpeg":
-                    fileSuffix = ".jpeg";
-                    break;
-                case "image/png":
-                    fileSuffix = ".png";
-                    break;
-                default:
-                    throw new ImageException("Unsupported image type! Must be JPG, JPEG or PNG.");
-            }
-            // Create a temporary file.
-            // Copy the uploaded image to the temp file.
-            // Upload the image to cloudinary.
-            // Delete the local file.
-            File directory = new File(working_dir + File.separator + UPLOAD_DIR);
-            File file = File.createTempFile("temp", fileSuffix, directory);
-            Files.copy(part.getInputStream(), file.toPath(), StandardCopyOption.REPLACE_EXISTING);
-            Map uploadResult = null;
-            uploadResult = cloudinary.uploader().upload(file, ObjectUtils.emptyMap());
-            returnString = (String) uploadResult.get("url");
-            file.delete();
+    public String uploadProfilePic(File file) throws ImageException, IOException {
+        Map uploadResult = null;
+        try {
+            uploadResult = cloudinary.uploader().upload(file, Cloudinary.asMap("upload_preset", "ml_default"));
+        } catch (RuntimeException e) {
+            throw new ImageException("Unsupported image type! Must be JPG, JPEG or PNG.");
         }
-        return returnString;
+        return (String) uploadResult.get("url");
     }
 }

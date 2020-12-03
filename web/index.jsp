@@ -27,19 +27,23 @@
         <c:choose>
             <c:when test="${sessionScope.get('username') ==null}">
                 <form action="/login" METHOD="get">
+                    <input type="hidden" name="web_token" value="<c:out value="${web_csrf_token}" />">
                     <input type="submit" value="Login" class="btn btn-primary"/>
                 </form>
             </c:when>
             <c:otherwise>
                 <form action="/logout">
+                    <input type="hidden" name="web_token" value="<c:out value="${web_csrf_token}" />">
                     <input type="submit" value="Logout" class="btn btn-primary"/>
                 </form>
                 <form action="/profile">
+                    <input type="hidden" name="web_token" value="<c:out value="${web_csrf_token}" />">
                     <input type="submit" value="Go To Profile Page" class="btn btn-primary"/>
                 </form>
                 <%--   If admin show btn--%>
                 <c:if test="${sessionScope.username.role.equals('admin')}">
                     <form action="/secretAdminPage">
+                        <input type="hidden" name="web_token" value="<c:out value="${web_csrf_token}" />">
                         <input type="submit" value="Go To Admin Page" class="btn btn-primary"/>
                     </form>
                 </c:if>
@@ -48,11 +52,13 @@
 
         <c:if test="${sessionScope.get('username') ==null}">
             <form action="/register">
+                <input type="hidden" name="web_token" value="<c:out value="${web_csrf_token}" />">
                 <input type="submit" value="Register As New User" class="btn btn-primary"/>
             </form>
         </c:if>
 
         <form action="/forum">
+            <input type="hidden" name="web_token" value="<c:out value="${web_csrf_token}" />">
             <input type="submit" value="Go To Forum" class="btn btn-primary"/>
         </form>
     </div>

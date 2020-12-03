@@ -21,13 +21,15 @@
         <div align="center">
 
             <h2>Edit profile</h2>
-            <form action="/index.jsp">
+            <form action="/index">
+                <input type="hidden" name="web_token" value="<c:out value="${web_csrf_token}" />">
                 <input type="submit" value="Back to frontpage" class="btn btn-primary"/>
             </form>
 
             <p>Change username, contact email or password.</p>
 
             <form action="/edit" method="post">
+                <input type="hidden" name="web_token" value="<c:out value="${web_csrf_token}" />">
                 New username: <input type="text" name="newUsername" width="30" value="<c:out value="${newUsername}" />"/></br></br>
                 New email: <input type="text" name="newEmail" width="30" value="<c:out value="${newEmail}" />"/></br></br>
                 New password: <input type="password" name="newPassword" width="10" min="12" max="200"/></br></br>

@@ -28,11 +28,14 @@ import java.io.IOException;
 @WebServlet(name = "UserController")
 public class UserController extends HttpServlet {
     protected void doPost(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
-        if (SecureRandomString.validateSecureString(request.getParameter("web_token"))) {
-            request.setAttribute("csrf_success_error", "Tokens are equal");
+        if (!SecureRandomString.validateSecureString(request.getParameter("web_token"))) {
+            HttpSession session = request.getSession(false);
+            session.invalidate();
+            request.setAttribute("errorMessage", "Web tokens are NOT equal");
             request.setAttribute("web_csrf_token", SecureRandomString.genSecureRandomString());
+            request.getRequestDispatcher("/WEB-INF/login.jsp").forward(request, response);
         } else {
-            request.setAttribute("csrf_success_error", "Tokens are NOT equal");
+            //Create new web_csrf_token.
             request.setAttribute("web_csrf_token", SecureRandomString.genSecureRandomString());
         }
 
@@ -53,8 +56,9 @@ public class UserController extends HttpServlet {
                     if (user != null) {
                         //Login sucsessfull. Username and hashed psw are correct.
                         SessionHelper.rotateSessionIDWithUser(request.getSession(), request, user);
-                        response.sendRedirect("/profile");
-                        //request.getRequestDispatcher("/WEB-INF/profilePage.jsp").forward(request, response);
+                        //Return attributes
+                        request.setAttribute("user", user);
+                        request.getRequestDispatcher("/WEB-INF/profilePage.jsp").forward(request, response);
                     } else {
                         throw new AuthenticationException("SoMeThInG WeNt WrOnG :'(");
                     }
@@ -100,7 +104,7 @@ public class UserController extends HttpServlet {
                         throw new RegistrationException("Something went wrong");
                     }
                 } catch (MySQLDuplicateEntryException e) {
-                    request.setAttribute("errorMessage", "This username allready exists");
+                    request.setAttribute("errorMessage", "This username or e-mail allready exists");
                     request.getRequestDispatcher("/WEB-INF/register.jsp").forward(request, response);
                 } catch (RegistrationException e) {
                     request.setAttribute("errorMessage", e.getMessage());
@@ -108,7 +112,7 @@ public class UserController extends HttpServlet {
                 }
                 break;
             case "/edit":
-                //Put isn't viable through .jsp. Therfore we route it through the post.
+                //Put isn't viable through the servlet. Therfore we route it through the post.
                 doPut(request, response);
                 break;
         }
@@ -179,6 +183,7 @@ public class UserController extends HttpServlet {
     }
 
     protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
+        //Create new web_csrf_token.
         request.setAttribute("web_csrf_token", SecureRandomString.genSecureRandomString());
         //Update the session id, but keep the same user.
         HttpSession session = request.getSession();
@@ -206,6 +211,10 @@ public class UserController extends HttpServlet {
                     response.setStatus(403);
                     request.getRequestDispatcher("/error.jsp").forward(request, response);
                 }
+                break;
+            case "/index":
+                SessionHelper.rotateSessionIDWithUser(session, request, sessionUser);
+                request.getRequestDispatcher("index.jsp").forward(request, response);
                 break;
         }
     }
