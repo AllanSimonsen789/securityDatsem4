@@ -95,8 +95,6 @@ public class ProfileController extends HttpServlet {
                 request.setAttribute("errorMessage", e.getMessage());
             } catch (IOException e){
                 request.setAttribute("errorMessage", "Something went wrong, try again later.");
-            } catch (Exception e) {
-                e.printStackTrace();
             } finally {
                 //Cleanup
                 if (img_file != null){
