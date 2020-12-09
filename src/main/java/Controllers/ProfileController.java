@@ -15,6 +15,7 @@ import javax.servlet.annotation.WebServlet;
 import javax.servlet.http.*;
 import java.io.File;
 import java.io.IOException;
+import java.util.UUID;
 import java.nio.file.Files;
 import java.nio.file.StandardCopyOption;
 import java.util.Iterator;
@@ -63,11 +64,10 @@ public class ProfileController extends HttpServlet {
                 //Instanciate where we are check.
                 if (working_dir == null) workingDirectoryCheck();
 
-                // Create a temporary file.
-                // Copy the uploaded image to the temp file.
-                File directory = new File(working_dir + File.separator + UPLOAD_DIR);
-                img_file = File.createTempFile("temp", fileSuffix, directory);
-                Files.copy(filePart.getInputStream(), img_file.toPath(), StandardCopyOption.REPLACE_EXISTING);
+                // Create a file with a unique random name.
+                String randomFileName = UUID.randomUUID().toString();
+                filePart.write(working_dir + File.separator + UPLOAD_DIR + File.separator + randomFileName);
+                img_file = new File(working_dir + File.separator + UPLOAD_DIR + File.separator + randomFileName);
 
                 //Image decode check.
                 ImageInputStream iis = ImageIO.createImageInputStream(img_file);
@@ -94,6 +94,7 @@ public class ProfileController extends HttpServlet {
             } catch (ImageException e) {
                 request.setAttribute("errorMessage", e.getMessage());
             } catch (IOException e){
+                e.printStackTrace();
                 request.setAttribute("errorMessage", "Something went wrong, try again later.");
             } finally {
                 //Cleanup
