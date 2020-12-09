@@ -43,7 +43,7 @@ public class ImageMapper {
     public String uploadProfilePic(File file) throws ImageException, IOException {
         Map uploadResult = null;
         try {
-            uploadResult = cloudinary.uploader().upload(file, Cloudinary.asMap("upload_preset", "ml_default"));
+            uploadResult = cloudinary.uploader().upload(file, ObjectUtils.asMap("upload_preset", "ml_default"));
         } catch (RuntimeException e) {
             throw new ImageException("Unsupported image type! Must be JPG, JPEG or PNG.");
         }
