@@ -58,9 +58,6 @@ public class ProfileController extends HttpServlet {
                     throw new IllegalArgumentException("Unknown file content specified!");
                     //Send to error page.
                 }
-                //Find the file suffix
-                String fileSuffix = fileSuffixFinder(filePart);
-
                 //Instanciate where we are check.
                 if (working_dir == null) workingDirectoryCheck();
 
@@ -112,19 +109,6 @@ public class ProfileController extends HttpServlet {
             //Create new web_csrf_token.
             request.setAttribute("web_csrf_token", SecureRandomString.genSecureRandomString());
             response.sendRedirect("/login");
-        }
-    }
-
-    private String fileSuffixFinder(Part part) throws ImageException {
-        String contentType = part.getContentType();
-        //Check the file suffix, and return it.
-        switch (contentType.toLowerCase()) {
-            case "image/jpeg":
-                return ".jpeg";
-            case "image/png":
-                return ".png";
-            default:
-                throw new ImageException("Unsupported image type! Must be JPG, JPEG or PNG.");
         }
     }
 
