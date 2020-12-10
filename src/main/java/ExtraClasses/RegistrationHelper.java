@@ -29,11 +29,11 @@ public class RegistrationHelper {
             } else if (Character.isLowerCase(ch)) {
                 lowerCaseInPsw = true;
             }
-            if (numberInPsw && upperCaseInPsw && lowerCaseInPsw && pswLength >= 12) {
+            if (numberInPsw && upperCaseInPsw && lowerCaseInPsw && pswLength >= 12 && pswLength <= 32) {
                 return true;
             }
         }
-        throw new RegistrationException("Password must contain 12 letters. One upper case, one lower case and one number");
+        throw new RegistrationException("Password must contain between 12 and 32 characters. One upper case, one lower case and one number");
     }
 
     public static boolean checkEmail(String email) throws RegistrationException {

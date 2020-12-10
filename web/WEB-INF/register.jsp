@@ -32,10 +32,10 @@
                                  required/></br></br>
                 Email: <input type="text" name="email" width="30" value="<c:out value="${email}" />" required/></br></br>
                 Password: <input type="password" name="password" width="10" min="12" max="200" required/></br></br>
-                Retype password: <input type="password" name="password2" placeholder="Retype Password" width="10" min="12" max="200"
+                Retype password: <input type="password" name="password2" placeholder="Retype Password" width="10" min="12" max="32"
                                         required/></br></br>
                 <div class="passwprdReq">Password Requirements
-                    <span class="passwprdReqText"> Atleast 1 uppercase letter <br> Atleast 1 lowercase letter <br> Atleast 1 Number <br> Atleast 12 characters long </span>
+                    <span class="passwprdReqText"> Atleast 1 uppercase letter <br> Atleast 1 lowercase letter <br> Atleast 1 Number <br> Atleast 12 characters long <br> Max 32 characters long </span>
                 </div>
                 </br>
                 <div style="margin-top: 20px" class="g-recaptcha"
